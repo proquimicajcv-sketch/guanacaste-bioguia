@@ -7,86 +7,99 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
-<body class="bg-stone-900 text-stone-100 min-h-screen" x-data="guanacasteApp()">
+<body class="bg-emerald-950 text-stone-100 min-h-screen" x-data="guanacasteApp()">
 
-  <!-- Header -->
-  <header class="bg-amber-950 border-b border-amber-800 p-4 sticky top-0 z-50 shadow-md">
+  <!-- Header Estilo Tapantí -->
+  <header class="bg-emerald-900 border-b border-emerald-800 p-4 sticky top-0 z-50 shadow-md">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
       <div>
-        <span class="text-xs uppercase tracking-widest text-amber-400 font-semibold">Catálogo Oficial ACG / Guanacaste</span>
-        <h1 class="text-2xl font-bold text-white flex items-center gap-2">☀️ BioGuía Bosque Seco - Gira</h1>
+        <span class="text-xs uppercase tracking-widest text-emerald-300 font-semibold">P. N. / Pacífico Norte (Guanacaste)</span>
+        <h1 class="text-2xl font-bold text-white flex items-center gap-2">🌿 BioGuía de Campo</h1>
       </div>
-      <div class="flex items-center gap-3">
-        <span class="bg-amber-900 text-amber-200 px-4 py-1.5 rounded-full text-sm font-medium border border-amber-700">
-          Registrados: <strong x-text="totalRegistrados"></strong> / <strong x-text="especies.length"></strong>
-        </span>
+      
+      <!-- Botones Superiores de Navegación -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <button @click="modalGlosario = true" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-emerald-700 flex items-center gap-1.5">
+          📖 Glosario
+        </button>
+        <button @click="modalTrivia = true" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-emerald-700 flex items-center gap-1.5">
+          🎮 Trivia
+        </button>
+        <button @click="modalReporte = true" class="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-emerald-500 flex items-center gap-1.5">
+          📋 <span x-text="totalRegistrados"></span>
+        </button>
       </div>
     </div>
   </header>
 
   <!-- Main Container -->
-  <main class="max-w-7xl mx-auto p-4 md:p-6">
+  <main class="max-w-7xl mx-auto p-4 md:p-6 bg-emerald-950 min-h-screen">
     
-    <!-- Buscador y Filtros -->
+    <!-- Buscador -->
     <div class="mb-6 space-y-4">
-      <input type="text" x-model="busqueda" placeholder="Buscar especie por nombre científico, común o #ficha (ej. #001, Santa Rosa)..." 
-        class="w-full bg-stone-800 border border-stone-700 rounded-xl px-4 py-3 text-white placeholder-stone-400 focus:outline-none focus:border-amber-500">
+      <input type="text" x-model="busqueda" placeholder="Buscar especie o #ficha..." 
+        class="w-full bg-emerald-900/80 border border-emerald-700 rounded-xl px-4 py-3 text-white placeholder-emerald-300/60 focus:outline-none focus:border-emerald-400">
       
-      <!-- Categorías -->
+      <!-- Filtros por Categoría -->
       <div class="flex flex-wrap gap-2">
         <template x-for="cat in categorias">
           <button @click="categoriaActiva = cat" 
-            :class="categoriaActiva === cat ? 'bg-amber-600 text-white' : 'bg-stone-800 text-stone-300 hover:bg-stone-700'"
-            class="px-4 py-2 rounded-lg text-sm font-medium transition" x-text="cat"></button>
+            :class="categoriaActiva === cat ? 'bg-emerald-500 text-emerald-950 font-bold' : 'bg-emerald-900/60 text-emerald-200 hover:bg-emerald-800'"
+            class="px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-emerald-700" x-text="cat"></button>
         </template>
+        <button @click="categoriaActiva = 'Avistados'" 
+          :class="categoriaActiva === 'Avistados' ? 'bg-emerald-500 text-emerald-950 font-bold' : 'bg-emerald-900/60 text-emerald-200 hover:bg-emerald-800'"
+          class="px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-emerald-700" 
+          x-text="`✓ Avistados (${totalRegistrados})`"></button>
       </div>
     </div>
 
-    <!-- Grid de Especies (Tarjetas Estilo Catálogo) -->
+    <!-- Grid de Tarjetas -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <template x-for="esp in especiesFiltradas" :key="esp.id">
-        <div class="bg-stone-800 border-2 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between transition hover:border-amber-500"
-             :class="esp.registrado ? 'border-emerald-500 bg-stone-800/90' : 'border-stone-700'">
+        <div class="bg-emerald-900/40 border rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between transition hover:border-emerald-500"
+             :class="esp.registrado ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-emerald-800'">
           <div>
-            <!-- Cabecera de la Tarjeta -->
-            <div class="bg-stone-950 px-4 py-2 border-b border-stone-700 flex justify-between items-center">
-              <span class="text-xs font-mono text-amber-400 font-bold" x-text="`${esp.id} • ${esp.ubicacion}`"></span>
-              <span class="text-xs px-2 py-0.5 rounded font-semibold"
-                    :class="esp.estado.includes('VENENOSA') ? 'bg-red-900 text-red-200' : 'bg-stone-700 text-stone-300'"
-                    x-text="esp.estado"></span>
+            <!-- Cabecera de Tarjeta -->
+            <div class="bg-emerald-950/80 px-4 py-2 border-b border-emerald-800 flex justify-between items-center">
+              <span class="text-xs font-mono text-emerald-300 font-bold" x-text="`${esp.id} • ${esp.categoria}`"></span>
+              <div class="flex gap-2 items-center">
+                <span x-show="esp.registrado" class="bg-emerald-700 text-white text-[10px] px-2 py-0.5 rounded font-bold">✓ AVISTADO</span>
+                <span class="text-xs px-2 py-0.5 rounded font-semibold bg-emerald-800 text-emerald-200 border border-emerald-700" x-text="esp.estado"></span>
+              </div>
             </div>
 
-            <!-- Imagen Interactiva (Al hacer clic abre el registro GPS y Ficha) -->
+            <!-- Imagen Interactiva -->
             <div @click="abrirRegistroGPS(esp)" class="relative h-48 bg-stone-900 overflow-hidden cursor-pointer group">
               <img :src="esp.imagen" :alt="esp.nombreComun" class="w-full h-full object-cover transition duration-300 group-hover:scale-105">
-              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-white font-semibold text-sm gap-2">
-                📍 Toca para Registrar Avistamiento GPS
+              <div class="absolute inset-0 bg-emerald-950/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-emerald-200 font-semibold text-xs gap-1">
+                📍 Registrar Coordenadas GPS
               </div>
-              <span class="absolute bottom-2 right-2 bg-black/70 backdrop-blur text-xs px-2 py-1 rounded text-amber-300 font-medium" x-text="esp.categoria"></span>
             </div>
 
-            <!-- Cuerpo de la Tarjeta -->
-            <div class="p-4 space-y-2">
-              <h3 class="text-base font-bold text-amber-400 italic" x-text="esp.nombreCientifico"></h3>
+            <!-- Datos de la Especie -->
+            <div class="p-4 space-y-1.5">
+              <h3 class="text-base font-bold text-emerald-300 italic" x-text="esp.nombreCientifico"></h3>
               <p class="text-sm font-medium text-stone-100" x-text="esp.nombreComun"></p>
+              <p class="text-xs text-emerald-200/70 line-clamp-2" x-text="esp.descripcion"></p>
               
-              <div class="grid grid-cols-3 gap-1 pt-2 text-[11px] text-stone-300 bg-stone-900/60 p-2 rounded-lg border border-stone-700/50">
-                <div><strong class="text-amber-500 block">Hábitat:</strong> <span x-text="esp.habitat"></span></div>
-                <div><strong class="text-amber-500 block">Hábitos:</strong> <span x-text="esp.habitos"></span></div>
-                <div><strong class="text-amber-500 block">Dieta:</strong> <span x-text="esp.dieta"></span></div>
+              <div class="grid grid-cols-3 gap-1 pt-2 text-[10px] text-emerald-100/80 bg-emerald-950/60 p-2 rounded-lg border border-emerald-800">
+                <div><strong class="text-emerald-400 block">Hábitat:</strong> <span x-text="esp.habitat"></span></div>
+                <div><strong class="text-emerald-400 block">Hábitos:</strong> <span x-text="esp.habitos"></span></div>
+                <div><strong class="text-emerald-400 block">Dieta:</strong> <span x-text="esp.dieta"></span></div>
               </div>
             </div>
           </div>
           
-          <!-- Botones de Acción inferior -->
-          <div class="p-4 pt-0 flex gap-2 border-t border-stone-700/50 mt-2">
-            <button @click="abrirRegistroGPS(esp)" class="flex-1 bg-amber-950 hover:bg-amber-900 text-amber-300 border border-amber-700 py-2 rounded-xl text-xs font-semibold transition text-center">
-              📍 Registrar GPS
+          <!-- Botones de Acción -->
+          <div class="p-4 pt-0 flex gap-2 border-t border-emerald-800/60 mt-2">
+            <button @click="abrirRegistroGPS(esp)" class="flex-1 bg-emerald-800 hover:bg-emerald-700 text-emerald-100 border border-emerald-600 py-2 rounded-xl text-xs font-semibold transition text-center">
+              📍 Ficha GPS
             </button>
             <button @click="toggleRegistrado(esp.id)" 
-              :class="esp.registrado ? 'bg-emerald-700 text-white' : 'bg-stone-700 text-stone-300 hover:bg-stone-600'"
+              :class="esp.registrado ? 'bg-emerald-600 text-white' : 'bg-emerald-950 text-emerald-300 border border-emerald-700 hover:bg-emerald-900'"
               class="flex-1 py-2 rounded-xl text-xs font-semibold transition text-center"
-              x-text="esp.registrado ? '✓ Visto' : '+ Marcar Visto'">
+              x-text="esp.registrado ? '✓ Avistado' : '+ Registrar'">
             </button>
           </div>
         </div>
@@ -95,77 +108,141 @@
 
   </main>
 
-  <!-- Modal de Registro GPS y Observaciones de Campo -->
+  <!-- MODAL: REGISTRO GPS Y NOTAS -->
   <div x-show="modalAbierto" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
-    <div class="bg-stone-800 border border-stone-700 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl relative">
+    <div class="bg-emerald-900 border border-emerald-700 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl relative text-stone-100">
       <div class="flex justify-between items-start">
         <div>
-          <span class="text-xs font-mono text-amber-400" x-text="especieSeleccionada.id + ' • ' + especieSeleccionada.ubicacion"></span>
+          <span class="text-xs font-mono text-emerald-300" x-text="especieSeleccionada.id + ' • ' + especieSeleccionada.categoria"></span>
           <h2 class="text-xl font-bold text-white italic" x-text="especieSeleccionada.nombreCientifico"></h2>
-          <p class="text-sm text-stone-300" x-text="especieSeleccionada.nombreComun"></p>
+          <p class="text-sm text-emerald-200" x-text="especieSeleccionada.nombreComun"></p>
         </div>
-        <button @click="modalAbierto = false" class="text-stone-400 hover:text-white text-xl font-bold">&times;</button>
+        <button @click="modalAbierto = false" class="text-emerald-300 hover:text-white text-xl font-bold">&times;</button>
       </div>
 
-      <div class="bg-stone-900 p-4 rounded-xl space-y-2 border border-stone-700 text-xs font-mono text-stone-300">
+      <div class="bg-emerald-950 p-4 rounded-xl space-y-2 border border-emerald-800 text-xs font-mono text-emerald-200">
         <p><strong>📅 Fecha y Hora:</strong> <span x-text="registroActual.fecha"></span></p>
-        <p><strong>🌐 Coordenadas GPS:</strong> <span x-text="registroActual.coords">Obteniendo señal GPS...</span></p>
+        <p><strong>🌐 Coordenadas GPS:</strong> <span x-text="registroActual.coords">Detectando ubicación...</span></p>
         <p><strong>📍 Precisión:</strong> <span x-text="registroActual.precision"></span></p>
       </div>
 
       <div class="space-y-2">
-        <label class="text-xs font-semibold text-amber-400 uppercase tracking-wider">Notas de Campo / Microclima / Observaciones:</label>
-        <textarea x-model="registroActual.observaciones" rows="3" placeholder="Ej. Temperatura de 32°C, humedad alta junto a charca temporal, individuo activo a la sombra..." 
-          class="w-full bg-stone-900 border border-stone-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-amber-500"></textarea>
+        <label class="text-xs font-semibold text-emerald-300 uppercase tracking-wider">Notas de Campo / Microclima:</label>
+        <textarea x-model="registroActual.observaciones" rows="3" placeholder="Ej. Temperatura 33°C, sombra de árbol seco, individuo activo..." 
+          class="w-full bg-emerald-950 border border-emerald-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-400"></textarea>
       </div>
 
       <div class="flex gap-3 pt-2">
-        <button @click="guardarAvistamiento()" class="flex-1 bg-amber-600 hover:bg-amber-500 text-white font-semibold py-2.5 rounded-xl text-sm transition">
-          💾 Guardar Avistamiento con GPS
+        <button @click="guardarAvistamiento()" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold py-2.5 rounded-xl text-sm transition">
+          💾 Guardar Avistamiento
         </button>
-        <button @click="modalAbierto = false" class="bg-stone-700 hover:bg-stone-600 text-stone-300 px-4 py-2.5 rounded-xl text-sm transition">
+        <button @click="modalAbierto = false" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-200 px-4 py-2.5 rounded-xl text-sm transition">
           Cancelar
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Script con las 24 especies oficiales de Guanacaste -->
+  <!-- MODAL: REPORTE E ÍNDICE DE AVISTAMIENTOS -->
+  <div x-show="modalReporte" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
+    <div class="bg-emerald-900 border border-emerald-700 rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative text-stone-100 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-start border-b border-emerald-800 pb-3">
+        <div>
+          <span class="text-xs font-mono text-emerald-300 uppercase">Registro de Campo</span>
+          <h2 class="text-xl font-bold text-white">Índice de Avistamientos</h2>
+          <p class="text-xs text-emerald-200" x-text="`${totalRegistrados} de ${especies.length} especies confirmadas`"></p>
+        </div>
+        <button @click="modalReporte = false" class="text-emerald-300 hover:text-white text-xl font-bold">&times;</button>
+      </div>
+
+      <!-- Tarjeta de Rango Actual -->
+      <div class="bg-emerald-950 p-4 rounded-xl border border-emerald-700 flex items-center gap-4">
+        <span class="text-3xl">🌱</span>
+        <div>
+          <h4 class="font-bold text-emerald-300 text-sm" x-text="`Rango Actual: ${rangoActual.titulo}`"></h4>
+          <p class="text-xs text-emerald-200/80" x-text="rangoActual.descripcion"></p>
+        </div>
+      </div>
+
+      <div class="flex gap-2 flex-wrap">
+        <button @click="exportarCSV()" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 px-3 py-1.5 rounded-lg text-xs font-semibold border border-emerald-600">📥 Exportar CSV</button>
+        <button @click="reiniciarRegistros()" class="bg-red-950 hover:bg-red-900 text-red-200 px-3 py-1.5 rounded-lg text-xs font-semibold border border-red-800">🗑️ Reiniciar</button>
+      </div>
+
+      <!-- Lista de especies registradas -->
+      <div class="space-y-3 pt-2">
+        <template x-for="esp in especies.filter(e => e.registrado)" :key="esp.id">
+          <div class="bg-emerald-950 p-3 rounded-xl border border-emerald-800 flex justify-between items-center text-xs">
+            <div>
+              <strong class="text-emerald-300 font-mono" x-text="esp.id + ' • ' + esp.categoria"></strong>
+              <div class="font-bold text-white italic" x-text="esp.nombreCientifico"></div>
+              <div class="text-emerald-200/70" x-text="esp.nombreComun"></div>
+              <div class="text-[10px] text-emerald-400 mt-1" x-text="`📅 ${esp.ultimaCaptura?.fecha || 'N/D'} | 🌐 ${esp.ultimaCaptura?.coords || 'Sin GPS'}`"></div>
+            </div>
+            <button @click="toggleRegistrado(esp.id)" class="text-red-400 hover:text-red-300 font-bold px-2 py-1">&times;</button>
+          </div>
+        </template>
+        <p x-show="totalRegistrados === 0" class="text-center text-xs text-emerald-300/60 py-6">Aún no hay especies registradas en esta gira.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: NOTIFICACIÓN AUTOMÁTICA DE NUEVO RANGO -->
+  <div x-show="modalRangoAlerta" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
+    <div class="bg-emerald-900 border-2 border-emerald-400 rounded-2xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl">
+      <div class="text-4xl">🏆</div>
+      <h3 class="text-xs font-mono uppercase tracking-wider text-emerald-300">¡Nuevo Rango Desbloqueado!</h3>
+      <h2 class="text-2xl font-bold text-white" x-text="rangoActual.titulo"></h2>
+      <p class="text-sm text-emerald-200" x-text="rangoActual.descripcion"></p>
+      <button @click="modalRangoAlerta = false" class="w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold py-2.5 rounded-xl text-sm transition">
+        ¡Continuar Explorando!
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: GLOSARIO -->
+  <div x-show="modalGlosario" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
+    <div class="bg-emerald-900 border border-emerald-700 rounded-2xl max-w-xl w-full p-6 space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto text-stone-100">
+      <div class="flex justify-between items-center border-b border-emerald-800 pb-3">
+        <h2 class="text-lg font-bold text-emerald-300">📖 Glosario Científico de Campo</h2>
+        <button @click="modalGlosario = false" class="text-emerald-300 text-xl font-bold">&times;</button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div class="bg-emerald-950 p-3 rounded-xl border border-emerald-800"><strong class="text-emerald-300 block text-sm">Herpetología</strong> Disciplina encargada del estudio de los anfibios y reptiles.</div>
+        <div class="bg-emerald-950 p-3 rounded-xl border border-emerald-800"><strong class="text-emerald-300 block text-sm">Endemismo</strong> Condición en la cual una especie es nativa y exclusiva de una región geográfica restringida.</div>
+        <div class="bg-emerald-950 p-3 rounded-xl border border-emerald-800"><strong class="text-emerald-300 block text-sm">Criptpsis</strong> Adaptación evolutiva que permite a un organismo pasar desapercibido ante sus depredadores.</div>
+        <div class="bg-emerald-950 p-3 rounded-xl border border-emerald-800"><strong class="text-emerald-300 block text-sm">Sotobosque</strong> Capa de vegetación arbustiva y herbácea ubicada justo debajo del dosel del bosque seco.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TRIVIA -->
+  <div x-show="modalTrivia" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
+    <div class="bg-emerald-900 border border-emerald-700 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl text-stone-100">
+      <div class="flex justify-between items-center border-b border-emerald-800 pb-3">
+        <h2 class="text-base font-bold text-emerald-300">🎮 Trivia de Biología y Campo</h2>
+        <button @click="modalTrivia = false" class="text-emerald-300 text-xl font-bold">&times;</button>
+      </div>
+      <div class="space-y-3 text-sm">
+        <p class="font-semibold text-white">¿Cuál es una adaptación clave de la herpetofauna en el Bosque Seco durante la estación seca?</p>
+        <div class="space-y-2">
+          <button class="w-full text-left bg-emerald-950 hover:bg-emerald-800 p-3 rounded-xl border border-emerald-800 text-xs transition">A) Migración masiva hacia la costa</button>
+          <button class="w-full text-left bg-emerald-950 hover:bg-emerald-800 p-3 rounded-xl border border-emerald-800 text-xs transition">B) Estivación y refugio subterráneo</button>
+          <button class="w-full text-left bg-emerald-950 hover:bg-emerald-800 p-3 rounded-xl border border-emerald-800 text-xs transition">C) Cambio total de dieta a herbívora</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT DE LÓGICA Y DATOS -->
   <script>
     const especiesGuanacaste = [
-      // Mamíferos (#001 - #008)
-      { id: "#001", categoria: "Mamíferos", nombreCientifico: "Odocoileus virginianus", nombreComun: "Venado cola blanca", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Bosque seco / Sabanas", habitos: "Diurna / Crepuscular", dieta: "Herbívora (Brotes y pastos)", descripcion: "Cérvido emblemático de áreas abiertas y sabanas del bosque seco.", imagen: "https://images.unsplash.com/photo-1484406573264-08c6e9ccbd25?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#002", categoria: "Mamíferos", nombreCientifico: "Alouatta palliata", nombreComun: "Mono congo / Aullador", estado: "VU (Vulnerable)", ubicacion: "GUANACASTE", habitat: "Bosque seco maduro", habitos: "Diurna (Arbórea)", dieta: "Frugívora / Folívora", descripcion: "Famosos por sus potentes vocalizaciones audibles a kilómetros.", imagen: "https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#003", categoria: "Mamíferos", nombreCientifico: "Cebus capucinus", nombreComun: "Mono cariblanco", estado: "LC (Preocupación)", ubicacion: "SANTA ROSA", habitat: "Bosque seco y parches", habitos: "Diurna (Social)", dieta: "Omnívora (Frutos/Insectos)", descripcion: "Primate altamente inteligente y diestro en el uso de herramientas.", imagen: "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#004", categoria: "Mamíferos", nombreCientifico: "Pecari tajacu", nombreComun: "Saíno / Pecarí de collar", estado: "LC (Preocupación)", ubicacion: "GUANACASTE", habitat: "Suelo de bosque seco", habitos: "Diurna (En manada)", dieta: "Omnívora (Raíces/Frutos)", descripcion: "Viven en grupos familiares recorriendo el sotobosque en busca alimento.", imagen: "https://images.unsplash.com/photo-1596715693630-f6c0d33e2154?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#005", categoria: "Mamíferos", nombreCientifico: "Nasua narica", nombreComun: "Pizote / Coatí", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Senderos y áreas base", habitos: "Diurna (Grupal)", dieta: "Omnívora generalista", descripcion: "Reconocible por su larga cola anillada y hocico móvil.", imagen: "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#006", categoria: "Mamíferos", nombreCientifico: "Procyon lotor", nombreComun: "Mapache", estado: "LC (Seguro)", ubicacion: "NICOYA", habitat: "Cercano a esteros/ríos", habitos: "Nocturna / Crepuscular", dieta: "Omnívora (Crustáceos)", descripcion: "Excelente adaptabilidad a zonas acuáticas y parches boscosos.", imagen: "https://images.unsplash.com/photo-1554659960-398d23498616?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#007", categoria: "Mamíferos", nombreCientifico: "Puma concolor", nombreComun: "Puma", estado: "NT (Casi amenazado)", ubicacion: "SANTA ROSA", habitat: "Núcleo de bosque seco", habitos: "Solitaria / Elusiva", dieta: "Carnívora (Mamíferos)", descripcion: "Felino de gran adaptabilidad, depredador tope en el área.", imagen: "https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#008", categoria: "Mamíferos", nombreCientifico: "Panthera onca", nombreComun: "Jaguar", estado: "NT (Monitoreado)", ubicacion: "SANTA ROSA", habitat: "Áreas protegidas densas", habitos: "Nocturna / Solitaria", dieta: "Carnívora estricta", descripcion: "El felino más grande de América, símbolo de conservación.", imagen: "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=600&q=80", registrado: false },
-
-      // Reptiles (#009 - #012)
-      { id: "#009", categoria: "Reptiles", nombreCientifico: "Crotalus simus", nombreComun: "Serpiente de cascabel", estado: "VENENOSA", ubicacion: "SANTA ROSA", habitat: "Zonas secas y abiertas", habitos: "Nocturna / Terrestre", dieta: "Carnívora (Roedores)", descripcion: "Posee sonajero córneo distintivo en la cola.", imagen: "https://images.unsplash.com/photo-1562332213-31fbb830f980?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#010", categoria: "Reptiles", nombreCientifico: "Bothrops asper", nombreComun: "Terciopelo", estado: "VENENOSA", ubicacion: "GUANACASTE", habitat: "Quebradas y bajuras", habitos: "Nocturna / Emboscada", dieta: "Carnívora (Pequeños vertebrados)", descripcion: "Viperino de hábitos sigilosos y gran importancia médica.", imagen: "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#011", categoria: "Reptiles", nombreCientifico: "Boa imperator", nombreComun: "Boa constrictor", estado: "INOFENSIVA", ubicacion: "NICOYA", habitat: "Árboles y bajuras", habitos: "Nocturna / Arbórea", dieta: "Carnívora (Constricción)", descripcion: "Gran serpiente constrictora de patrones geométricos dorsales.", imagen: "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#012", categoria: "Reptiles", nombreCientifico: "Ctenosaura similis", nombreComun: "Garrobo / Iguana negra", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Suelo y troncos secos", habitos: "Diurna (Heliófila)", dieta: "Herbívora / Omnívora", descripcion: "El lagarto más rápido del mundo, activo tomando sol sobre rocas y ramas.", imagen: "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?auto=format&fit=crop&w=600&q=80", registrado: false },
-
-      // Anfibios (#013 - #016)
-      { id: "#013", categoria: "Anfibios", nombreCientifico: "Rhinella horribilis", nombreComun: "Sapo gigante / Común", estado: "LC (Abundante)", ubicacion: "GUANACASTE", habitat: "Charcas temporales", habitos: "Nocturna", dieta: "Insectívora generalista", descripcion: "Robustos anfibios que emergen masivamente con las primeras lluvias.", imagen: "https://images.unsplash.com/photo-1574068468729-54a226bc1491?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#014", categoria: "Anfibios", nombreCientifico: "Smilisca baudinii", nombreComun: "Rana arborícola mexicana", estado: "LC (Seguro)", ubicacion: "NICOYA", habitat: "Bajuras y charcas", habitos: "Nocturna (Arbórea)", dieta: "Insectos voladores", descripcion: "Ranita arborícola con capacidad de cambiar de tonalidad.", imagen: "https://images.unsplash.com/photo-1574068468729-54a226bc1491?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#015", categoria: "Anfibios", nombreCientifico: "Engystomops pustulosus", nombreComun: "Rana túngara", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Charcas temporales", habitos: "Nocturna (Suelo)", dieta: "Microinsectos / Hormigas", descripcion: "Famosa por sus complejos cantos flotantes en charcos comunales.", imagen: "https://images.unsplash.com/photo-1574068468729-54a226bc1491?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#016", categoria: "Anfibios", nombreCientifico: "Rhinophrynus dorsalis", nombreComun: "Sapo cavador mexicano", estado: "LC (Especial)", ubicacion: "GUANACASTE", habitat: "Suelo arenoso / Subterráneo", habitos: "Fosas subterráneas", dieta: "Especializada en termitas", descripcion: "Anfibio de cuerpo regordete adaptado para cavar de espaldas.", imagen: "https://images.unsplash.com/photo-1574068468729-54a226bc1491?auto=format&fit=crop&w=600&q=80", registrado: false },
-
-      // Aves (#017 - #020)
-      { id: "#017", categoria: "Aves", nombreCientifico: "Calocitta formosa", nombreComun: "Urraca hermosa / Pelona", estado: "LC (Muy común)", ubicacion: "SANTA ROSA", habitat: "Copas de bosque seco", habitos: "Diurna (Bandadas)", dieta: "Omnívora (Frutos/Insectos)", descripcion: "Ave bulliciosa con larga cola y cresta llamativa.", imagen: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#018", categoria: "Aves", nombreCientifico: "Eumomota superciliosa", nombreComun: "Momoto cejiturquesa / Toledo", estado: "LC (Seguro)", ubicacion: "NICOYA", habitat: "Taludes y matorrales", habitos: "Diurna (Sedentaria)", dieta: "Insectívora / Pequeños frutos", descripcion: "Reconocible por su cola en forma de péndulo.", imagen: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#019", categoria: "Aves", nombreCientifico: "Amazona auropalliata", nombreComun: "Lora nuca amarilla", estado: "EN (En peligro)", ubicacion: "SANTA ROSA", habitat: "Árboles maduros altos", habitos: "Diurna (En parejas)", dieta: "Frugívora (Semillas/Frutos)", descripcion: "Lora de plumaje verde brillante y nuca dorada, muy cotizada.", imagen: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#020", categoria: "Aves", nombreCientifico: "Crax rubra", nombreComun: "Pava crestada", estado: "VU (Vulnerable)", ubicacion: "GUANACASTE", habitat: "Suelo de bosque maduro", habitos: "Diurna (Terrestre)", dieta: "Frugívora (Caídos al suelo)", descripcion: "Gran ave gallinácea que camina silenciosa entre la hojarasca.", imagen: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=600&q=80", registrado: false },
-
-      // Invertebrados (#021 - #024)
-      { id: "#021", categoria: "Invertebrados", nombreCientifico: "Caligo spp.", nombreComun: "Mariposa Búho", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Sombras del bosque", habitos: "Crepuscular / Nocturna", dieta: "Frugívora (Jugos fermentados)", descripcion: "Grandes ocelos en las alas similares a ojos de búho.", imagen: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#022", categoria: "Invertebrados", nombreCientifico: "Morpho peleides", nombreComun: "Mariposa Morfo azul", estado: "LC (Seguro)", ubicacion: "NICOYA", habitat: "Quebradas sombreadas", habitos: "Diurna (Vuelo activo)", dieta: "Fluidos de fruta podrida", descripcion: "Destaca por el azul iridiscente metálico de sus alas.", imagen: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#023", categoria: "Invertebrados", nombreCientifico: "Aphonopelma spp.", nombreComun: "Tarántula de bajura", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Madrigueras de suelo", habitos: "Nocturna (Solitaria)", dieta: "Carnívora (Insectos)", descripcion: "Arácnido robusto que habita en galerías subterráneas.", imagen: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#024", categoria: "Invertebrados", nombreCientifico: "Cardisoma guanhumi", nombreComun: "Cangrejo terrestre rojo", estado: "LC (Abundante)", ubicacion: "SANTA CRUZ", habitat: "Esteros y bajuras", habitos: "Fosas subterráneas", dieta: "Detritívora / Herbívora", descripcion: "Cangrejo de tierra que construye cuevas profundas cerca de la costa.", imagen: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=600&q=80", registrado: false }
+      { id: "#001", categoria: "Mamíferos", nombreCientifico: "Odocoileus virginianus", nombreComun: "Venado cola blanca", estado: "LC", habitat: "Bosque seco / Sabanas", habitos: "Diurna", dieta: "Herbívora", descripcion: "Cérvido emblemático de áreas abiertas.", imagen: "https://images.unsplash.com/photo-1484406573264-08c6e9ccbd25?auto=format&fit=crop&w=600&q=80", registrado: false },
+      { id: "#002", categoria: "Mamíferos", nombreCientifico: "Alouatta palliata", nombreComun: "Mono congo", estado: "VU", habitat: "Bosque maduro", habitos: "Arbórea", dieta: "Frugívora", descripcion: "Aullidos matutinos audibles a distancia.", imagen: "https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?auto=format&fit=crop&w=600&q=80", registrado: false },
+      { id: "#003", categoria: "Reptiles", nombreCientifico: "Crotalus simus", nombreComun: "Cascabel centroamericana", estado: "Venenosa", habitat: "Zonas secas", habitos: "Nocturna", dieta: "Carnívora", descripcion: "Viperino con sonajero córneo.", imagen: "https://images.unsplash.com/photo-1562332213-31fbb830f980?auto=format&fit=crop&w=600&q=80", registrado: false },
+      { id: "#004", categoria: "Anfibios", nombreCientifico: "Smilisca baudinii", nombreComun: "Ranita arborícola mexicana", estado: "LC", habitat: "Charcas", habitos: "Nocturna", dieta: "Insectívora", descripcion: "Común en charcas temporales.", imagen: "https://images.unsplash.com/photo-1574068468729-54a226bc1491?auto=format&fit=crop&w=600&q=80", registrado: false },
+      { id: "#005", categoria: "Aves", nombreCientifico: "Calocitta formosa", nombreComun: "Urraca hermosa", estado: "LC", habitat: "Copas de árboles", habitos: "Bandadas", dieta: "Omnívora", descripcion: "Ave bulliciosa con larga cola.", imagen: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=600&q=80", registrado: false },
+      { id: "#006", categoria: "Invertebrados", nombreCientifico: "Morpho peleides", nombreComun: "Mariposa Morfo azul", estado: "LC", habitat: "Quebradas", habitos: "Diurna", dieta: "Fluidos", descripcion: "Azul iridiscente metálico.", imagen: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=600&q=80", registrado: false }
     ];
 
     function guanacasteApp() {
@@ -175,26 +252,41 @@
         categorias: ['Todos', 'Mamíferos', 'Reptiles', 'Anfibios', 'Aves', 'Invertebrados'],
         especies: especiesGuanacaste,
         modalAbierto: false,
+        modalReporte: false,
+        modalGlosario: false,
+        modalTrivia: false,
+        modalRangoAlerta: false,
         especieSeleccionada: {},
-        registroActual: {
-          fecha: '',
-          coords: '',
-          precision: '',
-          observaciones: ''
-        },
+        ultimoRangoNotificado: 0,
+        registroActual: { fecha: '', coords: '', precision: '', observaciones: '' },
+        
         get totalRegistrados() {
           return this.especies.filter(e => e.registrado).length;
         },
+        get rangoActual() {
+          const total = this.totalRegistrados;
+          if (total >= 6) return { titulo: "Maestro del Bosque Seco 🦉", descripcion: "Dominio absoluto de la biodiversidad del Pacífico Norte." };
+          if (total >= 3) return { titulo: "Naturalista de Campo 🌿", descripcion: "Excelente ojo clínico para descubrir la fauna local." };
+          return { titulo: "Explorador Novato 🌱", descripcion: "Primeros pasos firmes en el sendero. ¡Aventúrate más adentro!" };
+        },
         get especiesFiltradas() {
           return this.especies.filter(esp => {
+            if (this.categoriaActiva === 'Avistados') return esp.registrado;
             const coincideCat = this.categoriaActiva === 'Todos' || esp.categoria === this.categoriaActiva;
             const texto = this.busqueda.toLowerCase();
             const coincideBusqueda = esp.nombreCientifico.toLowerCase().includes(texto) ||
                                      esp.nombreComun.toLowerCase().includes(texto) ||
-                                     esp.id.toLowerCase().includes(texto) ||
-                                     esp.ubicacion.toLowerCase().includes(texto);
+                                     esp.id.toLowerCase().includes(texto);
             return coincideCat && coincideBusqueda;
           });
+        },
+        verificarRangoAutomatico() {
+          const total = this.totalRegistrados;
+          // Cada 3 avistamientos muestra la alerta emergente
+          if (total > 0 && total % 3 === 0 && total !== this.ultimoRangoNotificado) {
+            this.ultimoRangoNotificado = total;
+            this.modalRangoAlerta = true;
+          }
         },
         abrirRegistroGPS(esp) {
           this.especieSeleccionada = esp;
@@ -205,24 +297,15 @@
           this.registroActual.observaciones = esp.observacionesCampo || '';
           this.modalAbierto = true;
 
-          // Capturar Geolocalización GPS del Navegador en el celular
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
-              (position) => {
-                const lat = position.coords.latitude.toFixed(6);
-                const lon = position.coords.longitude.toFixed(6);
-                const alt = position.coords.altitude ? position.coords.altitude.toFixed(1) + 'm' : 'N/D';
-                this.registroActual.coords = `${lat}, ${lon} (Alt: ${alt})`;
-                this.registroActual.precision = `${position.coords.accuracy.toFixed(1)} metros`;
+              (pos) => {
+                this.registroActual.coords = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
+                this.registroActual.precision = `${pos.coords.accuracy.toFixed(1)} m`;
               },
-              (error) => {
-                this.registroActual.coords = 'GPS no disponible (Activa la ubicación)';
-                this.registroActual.precision = 'Error: ' + error.message;
-              },
-              { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+              () => { this.registroActual.coords = 'GPS no disponible'; },
+              { enableHighAccuracy: true, timeout: 8000 }
             );
-          } else {
-            this.registroActual.coords = 'Geolocalización no soportada por el navegador';
           }
         },
         guardarAvistamiento() {
@@ -231,7 +314,7 @@
             esp.registrado = true;
             esp.observacionesCampo = this.registroActual.observaciones;
             esp.ultimaCaptura = { ...this.registroActual };
-            alert(`¡Avistamiento de ${esp.nombreComun} registrado con éxito con datos GPS!`);
+            this.verificarRangoAutomatico();
           }
           this.modalAbierto = false;
         },
@@ -239,14 +322,29 @@
           const esp = this.especies.find(e => e.id === id);
           if (esp) {
             esp.registrado = !esp.registrado;
-            if (esp.registrado && !esp.ultimaCaptura) {
+            if (esp.registrado) {
               const ahora = new Date();
-              esp.ultimaCaptura = {
-                fecha: ahora.toLocaleDateString() + ' ' + ahora.toLocaleTimeString(),
-                coords: 'Marcado manual sin GPS'
-              };
+              esp.ultimaCaptura = { fecha: ahora.toLocaleDateString() + ' ' + ahora.toLocaleTimeString(), coords: 'Registro manual' };
+              this.verificarRangoAutomatico();
             }
           }
+        },
+        reiniciarRegistros() {
+          if (confirm("¿Deseas reiniciar todos los avistamientos?")) {
+            this.especies.forEach(e => { e.registrado = false; e.ultimaCaptura = null; });
+            this.ultimoRangoNotificado = 0;
+          }
+        },
+        exportarCSV() {
+          const reg = this.especies.filter(e => e.registrado);
+          let csv = "ID,Cientifico,Comun,Fecha,GPS\n";
+          reg.forEach(e => { csv += `${e.id},"${e.nombreCientifico}","${e.nombreComun}","${e.ultimaCaptura?.fecha}","${e.ultimaCaptura?.coords}"\n`; });
+          const blob = new Blob([csv], { type: 'text/csv' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.setAttribute('href', url);
+          a.setAttribute('download', 'reporte_avistamientos_guanacaste.csv');
+          a.click();
         }
       }
     }
