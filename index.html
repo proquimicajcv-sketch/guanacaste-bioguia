@@ -43,12 +43,10 @@
   <!-- Main Container -->
   <main class="max-w-7xl mx-auto p-4 md:p-6 min-h-screen space-y-6">
     
-    <!-- ESPACIO DE EDICIÓN EN CAMPO: NUEVO INDIVIDUO / ESPECIE -->
+    <!-- ESPACIO DE EDICIÓN EN CAMPO: NUEVO INDIVIDUO O EDICIÓN -->
     <div class="bg-[#1E2419]/95 border-2 border-[#A3B18B]/60 rounded-2xl p-4 md:p-6 shadow-2xl backdrop-blur">
       <div class="flex justify-between items-center mb-3">
-        <h2 class="text-sm font-bold text-[#CCD5AE] uppercase tracking-wider flex items-center gap-2">
-          ➕ Registrar Nuevo Hallazgo / Especie en Campo
-        </h2>
+        <h2 class="text-sm font-bold text-[#CCD5AE] uppercase tracking-wider flex items-center gap-2" x-text="editandoIndex !== null ? '✏️ Editando Ficha Existente' : '➕ Registrar Nuevo Hallazgo / Especie en Campo'"></h2>
         <button @click="mostrarFormulario = !mostrarFormulario" class="text-xs text-[#A3B18B] underline hover:text-white" x-text="mostrarFormulario ? 'Ocultar Formulario' : 'Mostrar Formulario'"></button>
       </div>
 
@@ -70,7 +68,6 @@
               <option value="Anfibios">Anfibios</option>
               <option value="Aves">Aves</option>
               <option value="Invertebrados">Invertebrados</option>
-              <option value="Plantas">Plantas</option>
             </select>
           </div>
           <div>
@@ -109,17 +106,16 @@
           </div>
         </div>
 
-        <div class="pt-2">
-          <button @click="agregarNuevaEspecie()" class="bg-[#606C38] hover:bg-[#4f592d] text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow flex items-center gap-1.5">
-            💾 Agregar a la Guía de Campo
-          </button>
+        <div class="pt-2 flex gap-2">
+          <button @click="guardarCambiosEspecie()" class="bg-[#606C38] hover:bg-[#4f592d] text-white font-bold px-4 py-2 rounded-xl text-xs transition shadow flex items-center gap-1.5" x-text="editandoIndex !== null ? '💾 Guardar Cambios' : '💾 Agregar a la Guía'"></button>
+          <button @click="cancelarEdicion()" x-show="editandoIndex !== null" class="bg-stone-700 hover:bg-stone-600 text-stone-200 px-3 py-2 rounded-xl text-xs transition">Cancelar</button>
         </div>
       </div>
     </div>
 
     <!-- Buscador -->
     <div class="space-y-4">
-      <input type="text" x-model="busqueda" placeholder="Buscar especie, científico, común, #ficha o zona (ej. Santa Rosa)..." 
+      <input type="text" x-model="busqueda" placeholder="Buscar especie, científico, común, #ficha o zona..." 
         class="w-full bg-[#1E2419]/90 border border-[#5C4033] rounded-xl px-4 py-3 text-white placeholder-stone-400 focus:outline-none focus:border-[#A3B18B] shadow-inner">
       
       <!-- Filtros por Categoría -->
@@ -138,16 +134,17 @@
 
     <!-- Grid de Tarjetas -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <template x-for="esp in especiesFiltradas" :key="esp.id">
+      <template x-for="(esp, index) in especiesFiltradas" :key="esp.id">
         <div class="bg-[#262D1F]/90 backdrop-blur border rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between transition hover:border-[#A3B18B]"
              :class="esp.registrado ? 'border-[#A3B18B] ring-2 ring-[#A3B18B]/50' : 'border-[#5C4033]/60'">
           <div>
-            <!-- Cabecera de Tarjeta -->
+            <!-- Cabecera de Tarjeta con botones de Editar y Eliminar -->
             <div class="bg-[#1C2317] px-4 py-2 border-b border-[#5C4033] flex justify-between items-center">
               <span class="text-xs font-mono text-[#CCD5AE] font-bold" x-text="`${esp.id} • ${esp.ubicacion}`"></span>
-              <div class="flex gap-2 items-center">
-                <span x-show="esp.registrado" class="bg-[#606C38] text-white text-[10px] px-2 py-0.5 rounded font-bold">✓ AVISTADO</span>
-                <span class="text-xs px-2 py-0.5 rounded font-semibold bg-[#4A3B32] text-[#D4A373] border border-[#5C4033]" x-text="esp.estado"></span>
+              <div class="flex gap-1.5 items-center">
+                <span x-show="esp.registrado" class="bg-[#606C38] text-white text-[9px] px-1.5 py-0.5 rounded font-bold">✓ VISTO</span>
+                <button @click="cargarEdicion(esp)" title="Editar tarjeta" class="bg-amber-900/80 hover:bg-amber-800 text-amber-200 text-[10px] px-2 py-0.5 rounded font-bold border border-amber-700">✏️</button>
+                <button @click="eliminarEspecie(esp.id)" title="Eliminar tarjeta" class="bg-red-950 hover:bg-red-900 text-red-200 text-[10px] px-2 py-0.5 rounded font-bold border border-red-800">🗑️</button>
               </div>
             </div>
 
@@ -157,6 +154,7 @@
               <div class="absolute inset-0 bg-[#2D3823]/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-[#E9EDC9] font-semibold text-xs gap-1">
                 📍 Registrar Coordenadas GPS
               </div>
+              <span class="absolute bottom-2 right-2 bg-black/70 backdrop-blur text-xs px-2 py-1 rounded text-[#D4A373] font-medium" x-text="esp.estado"></span>
             </div>
 
             <!-- Datos de la Especie -->
@@ -324,10 +322,9 @@
     </div>
   </div>
 
-  <!-- SCRIPT DE LÓGICA Y LAS 24 ESPECIES OFICIALES + NUEVOS REGISTROS -->
+  <!-- SCRIPT DE LÓGICA Y EDICIÓN/ELIMINACIÓN -->
   <script>
     const especiesGuanacaste = [
-      // Mamíferos (#001 - #008)[cite: 15, 16]
       { id: "#001", categoria: "Mamíferos", nombreCientifico: "Odocoileus virginianus", nombreComun: "Venado cola blanca", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Bosque seco / Sabanas", habitos: "Diurna/Crepuscular", dieta: "Herbívora (Brotes y pastos)", descripcion: "Cérvido emblemático de áreas abiertas y sabanas del bosque seco.", imagen: "https://images.unsplash.com/photo-1484406573264-08c6e9ccbd25?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#002", categoria: "Mamíferos", nombreCientifico: "Alouatta palliata", nombreComun: "Mono congo / Aullador", estado: "VU (Vulnerable)", ubicacion: "GUANACASTE", habitat: "Bosque seco maduro", habitos: "Diurna (Arbórea)", dieta: "Frugívora/Folívora", descripcion: "Famosos por sus potentes vocalizaciones audibles a kilómetros.", imagen: "https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#003", categoria: "Mamíferos", nombreCientifico: "Cebus capucinus", nombreComun: "Mono cariblanco", estado: "LC (Preocupación)", ubicacion: "SANTA ROSA", habitat: "Bosque seco y parches", habitos: "Diurna (Social)", dieta: "Omnívora (Frutos/Insectos)", descripcion: "Primate altamente inteligente y diestro en el uso de herramientas.", imagen: "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=600&q=80", registrado: false },
@@ -337,25 +334,21 @@
       { id: "#007", categoria: "Mamíferos", nombreCientifico: "Puma concolor", nombreComun: "Puma", estado: "NT (Casi amenazado)", ubicacion: "SANTA ROSA", habitat: "Núcleo de bosque seco", habitos: "Solitaria/Elusiva", dieta: "Carnívora (Mamíferos)", descripcion: "Felino de gran adaptabilidad, depredador tope en el área.", imagen: "https://images.unsplash.com/photo-1534188753412-3e26d0d618d6?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#008", categoria: "Mamíferos", nombreCientifico: "Panthera onca", nombreComun: "Jaguar", estado: "NT (Monitoreado)", ubicacion: "SANTA ROSA", habitat: "Áreas protegidas densas", habitos: "Nocturna/Solitaria", dieta: "Carnívora estricta", descripcion: "El felino más grande de América, símbolo de conservación.", imagen: "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=600&q=80", registrado: false },
 
-      // Reptiles (#009 - #012)[cite: 17]
       { id: "#009", categoria: "Reptiles", nombreCientifico: "Crotalus simus", nombreComun: "Serpiente de cascabel", estado: "VENENOSA", ubicacion: "SANTA ROSA", habitat: "Zonas secas y abiertas", habitos: "Nocturna/Terrestre", dieta: "Carnívora (Roedores)", descripcion: "Posee sonajero córneo distintivo en la cola.", imagen: "https://images.unsplash.com/photo-1562332213-31fbb830f980?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#010", categoria: "Reptiles", nombreCientifico: "Bothrops asper", nombreComun: "Terciopelo", estado: "VENENOSA", ubicacion: "GUANACASTE", habitat: "Quebradas y bajuras", habitos: "Nocturna/Emboscada", dieta: "Carnívora (Pequeños vertebrados)", descripcion: "Viperino de hábitos sigilosos y gran importancia médica.", imagen: "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#011", categoria: "Reptiles", nombreCientifico: "Boa imperator", nombreComun: "Boa constrictor", estado: "INOFENSIVA", ubicacion: "NICOYA", habitat: "Árboles y bajuras", habitos: "Nocturna/Arbórea", dieta: "Carnívora (Constricción)", descripcion: "Gran serpiente constrictora de patrones geométricos dorsales.", imagen: "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#012", categoria: "Reptiles", nombreCientifico: "Ctenosaura similis", nombreComun: "Garrobo / Iguana negra", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Suelo y troncos secos", habitos: "Diurna (Heliófila)", dieta: "Herbívora/Omnívora", descripcion: "El lagarto más rápido del mundo, activo tomando sol sobre rocas.", imagen: "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?auto=format&fit=crop&w=600&q=80", registrado: false },
 
-      // Anfibios (#013 - #016)[cite: 18]
       { id: "#013", categoria: "Anfibios", nombreCientifico: "Rhinella horribilis", nombreComun: "Sapo gigante / Común", estado: "LC (Abundante)", ubicacion: "GUANACASTE", habitat: "Charcas temporales", habitos: "Nocturna", dieta: "Insectívora generalista", descripcion: "Robustos anfibios que emergen masivamente con las primeras lluvias.", imagen: "https://images.unsplash.com/photo-1574068468729-54a226bc1491?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#014", categoria: "Anfibios", nombreCientifico: "Smilisca baudinii", nombreComun: "Rana arborícola mexicana", estado: "LC (Seguro)", ubicacion: "NICOYA", habitat: "Bajuras y charcas", habitos: "Nocturna (Arbórea)", dieta: "Insectos voladores", descripcion: "Ranita arborícola con capacidad de cambiar de tonalidad.", imagen: "https://images.unsplash.com/photo-1574068468729-54a226bc1491?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#015", categoria: "Anfibios", nombreCientifico: "Engystomops pustulosus", nombreComun: "Rana túngara", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Charcas temporales", habitos: "Nocturna (Suelo)", dieta: "Microinsectos/Hormigas", descripcion: "Famosa por sus complejos cantos flotantes en charcos comunales.", imagen: "https://images.unsplash.com/photo-1574068468729-54a226bc1491?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#016", categoria: "Anfibios", nombreCientifico: "Rhinophrynus dorsalis", nombreComun: "Sapo cavador mexicano", estado: "LC (Especial)", ubicacion: "GUANACASTE", habitat: "Suelo arenoso/Subterráneo", habitos: "Fosas subterráneas", dieta: "Especializada en termitas", descripcion: "Anfibio de cuerpo regordete adaptado para cavar de espaldas.", imagen: "https://images.unsplash.com/photo-1574068468729-54a226bc1491?auto=format&fit=crop&w=600&q=80", registrado: false },
 
-      // Aves (#017 - #020)[cite: 19]
       { id: "#017", categoria: "Aves", nombreCientifico: "Calocitta formosa", nombreComun: "Urraca hermosa / Pelona", estado: "LC (Muy común)", ubicacion: "SANTA ROSA", habitat: "Copas de bosque seco", habitos: "Diurna (Bandadas)", dieta: "Omnívora (Frutos/Insectos)", descripcion: "Ave bulliciosa con larga cola y cresta llamativa.", imagen: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#018", categoria: "Aves", nombreCientifico: "Eumomota superciliosa", nombreComun: "Momoto cejiturquesa / Toledo", estado: "LC (Seguro)", ubicacion: "NICOYA", habitat: "Taludes y matorrales", habitos: "Diurna (Sedentaria)", dieta: "Insectívora/Pequeños frutos", descripcion: "Reconocible por su cola en forma de péndulo.", imagen: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#019", categoria: "Aves", nombreCientifico: "Amazona auropalliata", nombreComun: "Lora nuca amarilla", estado: "EN (En peligro)", ubicacion: "SANTA ROSA", habitat: "Árboles maduros altos", habitos: "Diurna (En parejas)", dieta: "Frugívora (Semillas/Frutos)", descripcion: "Lora de plumaje verde brillante y nuca dorada.", imagen: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#020", categoria: "Aves", nombreCientifico: "Crax rubra", nombreComun: "Pava crestada", estado: "VU (Vulnerable)", ubicacion: "GUANACASTE", habitat: "Suelo de bosque maduro", habitos: "Diurna (Terrestre)", dieta: "Frugívora (Caídos al suelo)", descripcion: "Gran ave gallinácea que camina silenciosa entre la hojarasca.", imagen: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=600&q=80", registrado: false },
 
-      // Invertebrados (#021 - #024)[cite: 20]
       { id: "#021", categoria: "Invertebrados", nombreCientifico: "Caligo spp.", nombreComun: "Mariposa Búho", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Sombras del bosque", habitos: "Crepuscular/Nocturna", dieta: "Frugívora (Jugos fermentados)", descripcion: "Grandes ocelos en las alas similares a ojos de búho.", imagen: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#022", categoria: "Invertebrados", nombreCientifico: "Morpho peleides", nombreComun: "Mariposa Morfo azul", estado: "LC (Seguro)", ubicacion: "NICOYA", habitat: "Quebradas sombreadas", habitos: "Diurna (Vuelo activo)", dieta: "Fluidos de fruta podrida", descripcion: "Destaca por el azul iridiscente metálico de sus alas.", imagen: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#023", categoria: "Invertebrados", nombreCientifico: "Aphonopelma spp.", nombreComun: "Tarántula de bajura", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Madrigueras de suelo", habitos: "Nocturna (Solitaria)", dieta: "Carnívora (Insectos)", descripcion: "Arácnido robusto que habita en galerías subterráneas.", imagen: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=600&q=80", registrado: false },
@@ -444,6 +437,7 @@
         modalTrivia: false,
         modalRangoAlerta: false,
         mostrarFormulario: false,
+        editandoIndex: null,
         especieSeleccionada: {},
         ultimoRangoNotificado: 0,
         registroActual: { fecha: '', coords: '', precision: '', observaciones: '' },
@@ -481,33 +475,67 @@
             return coincideCat && coincideBusqueda;
           });
         },
-        agregarNuevaEspecie() {
+        guardarCambiosEspecie() {
           if (!this.nuevo.nombreCientifico || !this.nuevo.nombreComun) {
             alert("Por favor ingresa al menos el nombre científico y común.");
             return;
           }
-          const nuevoId = `#0${this.especies.length + 1}`;
-          this.especies.unshift({
-            id: nuevoId,
-            categoria: this.nuevo.categoria,
-            nombreCientifico: this.nuevo.nombreCientifico,
-            nombreComun: this.nuevo.nombreComun,
-            estado: this.nuevo.estado || 'REGISTRADO',
-            ubicacion: this.nuevo.ubicacion || 'CAMPO',
-            habitat: this.nuevo.habitat || 'Bosque seco',
-            habitos: this.nuevo.habitos || 'Activo',
-            dieta: this.nuevo.dieta || 'Generalista',
-            descripcion: this.nuevo.descripcion || 'Individuo nuevo registrado en gira de campo.',
-            imagen: this.nuevo.imagen || 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=600&q=80',
-            registrado: true,
-            ultimaCaptura: {
-              fecha: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
-              coords: 'Añadido manualmente en campo'
-            }
-          });
-          alert(`¡Especie ${this.nuevo.nombreComun} agregada y marcada como avistada con éxito!`);
+          if (this.editandoIndex !== null) {
+            // Actualizar especie existente
+            const esp = this.especies[this.editandoIndex];
+            esp.nombreCientifico = this.nuevo.nombreCientifico;
+            esp.nombreComun = this.nuevo.nombreComun;
+            esp.categoria = this.nuevo.categoria;
+            esp.ubicacion = this.nuevo.ubicacion;
+            esp.estado = this.nuevo.estado;
+            esp.habitat = this.nuevo.habitat;
+            esp.habitos = this.nuevo.habitos;
+            esp.dieta = this.nuevo.dieta;
+            esp.imagen = this.nuevo.imagen || esp.imagen;
+            esp.descripcion = this.nuevo.descripcion;
+            alert("¡Ficha actualizada con éxito!");
+          } else {
+            // Agregar nueva especie
+            const nuevoId = `#0${this.especies.length + 1}`;
+            this.especies.unshift({
+              id: nuevoId,
+              categoria: this.nuevo.categoria,
+              nombreCientifico: this.nuevo.nombreCientifico,
+              nombreComun: this.nuevo.nombreComun,
+              estado: this.nuevo.estado || 'REGISTRADO',
+              ubicacion: this.nuevo.ubicacion || 'CAMPO',
+              habitat: this.nuevo.habitat || 'Bosque seco',
+              habitos: this.nuevo.habitos || 'Activo',
+              dieta: this.nuevo.dieta || 'Generalista',
+              descripcion: this.nuevo.descripcion || 'Individuo nuevo registrado en gira de campo.',
+              imagen: this.nuevo.imagen || 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=600&q=80',
+              registrado: true,
+              ultimaCaptura: {
+                fecha: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
+                coords: 'Añadido manualmente en campo'
+              }
+            });
+            alert(`¡Especie ${this.nuevo.nombreComun} agregada y marcada como avistada!`);
+          }
+          this.cancelarEdicion();
+        },
+        cargarEdicion(esp) {
+          this.editandoIndex = this.especies.findIndex(e => e.id === esp.id);
+          this.nuevo = { ...esp };
+          this.mostrarFormulario = true;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        },
+        cancelarEdicion() {
+          this.editandoIndex = null;
           this.nuevo = { nombreCientifico: '', nombreComun: '', categoria: 'Reptiles', ubicacion: 'CAMPO', estado: 'NUEVO', habitat: '', habitos: '', dieta: '', imagen: '', descripcion: '' };
           this.mostrarFormulario = false;
+        },
+        eliminarEspecie(id) {
+          const esp = this.especies.find(e => e.id === id);
+          if (confirm(`¿Estás completamente seguro de que deseas eliminar la tarjeta de "${esp.nombreComun}" (${esp.nombreCientifico}) de la guía?`)) {
+            this.especies = this.especies.filter(e => e.id !== id);
+            alert("Tarjeta eliminada correctamente.");
+          }
         },
         verificarRangoAutomatico() {
           const total = this.totalRegistrados;
