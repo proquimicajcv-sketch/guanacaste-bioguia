@@ -152,11 +152,11 @@
               </div>
             </div>
 
-            <!-- Imagen Local Interactiva -->
-            <div @click="abrirRegistroGPS(esp)" class="relative h-48 bg-stone-900 overflow-hidden cursor-pointer group">
-              <img :src="esp.imagen" :alt="esp.nombreComun" class="w-full h-full object-cover transition duration-300 group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=600&q=80'">
+            <!-- Imagen Completa (object-contain con fondo elegante para que no se corte) -->
+            <div @click="ampliarImagen(esp)" class="relative h-52 bg-black/40 overflow-hidden cursor-pointer group flex items-center justify-center p-1">
+              <img :src="esp.imagen" :alt="esp.nombreComun" class="w-full h-full object-contain transition duration-300 group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=600&q=80'">
               <div class="absolute inset-0 bg-[#2D3823]/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-[#E9EDC9] font-semibold text-xs gap-1">
-                📍 Registrar Coordenadas GPS
+                🔍 Ver Imagen Completa
               </div>
               <span class="absolute bottom-2 right-2 bg-black/70 backdrop-blur text-xs px-2 py-1 rounded text-[#D4A373] font-medium" x-text="esp.estado"></span>
             </div>
@@ -191,6 +191,27 @@
     </div>
 
   </main>
+
+  <!-- MODAL: VISOR DE IMAGEN EN GRANDE (COMPLETA Y SIN CORTES) -->
+  <div x-show="modalImagenAbierto" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4" style="display: none;" @click="modalImagenAbierto = false">
+    <div class="relative max-w-4xl w-full max-h-[90vh] flex flex-col items-center p-2" @click.stop>
+      <button @click="modalImagenAbierto = false" class="absolute -top-10 right-0 text-stone-300 hover:text-white text-3xl font-bold">&times;</button>
+      <div class="bg-[#1C2317] border border-[#5C4033] rounded-2xl overflow-hidden shadow-2xl w-full p-3 text-center space-y-2">
+        <div class="text-xs font-mono text-[#CCD5AE]" x-text="imagenAmpliada.id + ' • ' + imagenAmpliada.ubicacion"></div>
+        <h3 class="text-lg font-bold text-white italic" x-text="imagenAmpliada.nombreCientifico"></h3>
+        <p class="text-sm text-[#D4A373]" x-text="imagenAmpliada.nombreComun"></p>
+        
+        <!-- Contenedor con la imagen completa sin recortes -->
+        <div class="w-full h-[65vh] bg-black/60 rounded-xl flex items-center justify-center overflow-hidden p-2">
+          <img :src="imagenAmpliada.imagen" :alt="imagenAmpliada.nombreComun" class="max-w-full max-h-full object-contain rounded-lg shadow-lg" onerror="this.src='https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80'">
+        </div>
+        
+        <button @click="modalImagenAbierto = false" class="bg-[#4A3B32] hover:bg-[#5C4033] text-stone-200 px-6 py-2 rounded-xl text-xs transition font-semibold">
+          Cerrar Visor
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL: REGISTRO GPS Y NOTAS -->
   <div x-show="modalAbierto" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
@@ -436,9 +457,11 @@
         modalGlosario: false,
         modalTrivia: false,
         modalRangoAlerta: false,
+        modalImagenAbierto: false,
         mostrarFormulario: false,
         editandoIndex: null,
         especieSeleccionada: {},
+        imagenAmpliada: {},
         ultimoRangoNotificado: 0,
         registroActual: { fecha: '', coords: '', precision: '', observaciones: '' },
         nuevo: {
@@ -456,8 +479,8 @@
         },
 
         init() {
-          // Usamos 'v7' para asegurar que el navegador cargue la versión con la extensión correcta .jpg.jfif
-          const guardadas = localStorage.getItem('bioguia_guanacaste_especies_v7');
+          // Usamos 'v8' para actualizar el almacenamiento local con el nuevo visor de imágenes completas
+          const guardadas = localStorage.getItem('bioguia_guanacaste_especies_v8');
           if (guardadas) {
             this.especies = JSON.parse(guardadas);
           } else {
@@ -467,7 +490,7 @@
         },
 
         guardarEnStorage() {
-          localStorage.setItem('bioguia_guanacaste_especies_v7', JSON.stringify(this.especies));
+          localStorage.setItem('bioguia_guanacaste_especies_v8', JSON.stringify(this.especies));
         },
         
         get totalRegistrados() {
@@ -490,6 +513,10 @@
                                    esp.ubicacion.toLowerCase().includes(texto);
             return coincideCat && coincideBusqueda;
           });
+        },
+        ampliarImagen(esp) {
+          this.imagenAmpliada = esp;
+          this.modalImagenAbierto = true;
         },
         guardarCambiosEspecie() {
           if (!this.nuevo.nombreCientifico || !this.nuevo.nombreComun) {
