@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BioGuía de Campo - Pacífico Norte (Guanacaste)</title>
+  
+  <!-- ÍCONOS PARA DISPOSITIVOS MÓVILES (PANTALLA DE INICIO) -->
+  <link rel="icon" type="image/jpeg" href="img/ficha_107.jpg.jfif">
+  <link rel="apple-touch-icon" href="img/ficha_107.jpg.jfif">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="BioGuía Bosque Seco">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <style>
@@ -46,7 +54,7 @@
     <!-- ESPACIO DE EDICIÓN EN CAMPO: NUEVO INDIVIDUO O EDICIÓN -->
     <div class="bg-[#1E2419]/95 border-2 border-[#A3B18B]/60 rounded-2xl p-4 md:p-6 shadow-2xl backdrop-blur">
       <div class="flex justify-between items-center mb-3">
-        <h2 class="text-sm font-bold text-[#CCD5AE] uppercase tracking-wider flex items-center gap-2" x-text="editandoIndex !== null ? '✏️ Editando Ficha Existente' : '➕ Registrar Nueva Ficha en Campo'"></h2>
+        <h2 class="text-sm font-bold text-[#CCD5AE] uppercase tracking-wider flex items-center gap-2" x-text="editandoIndex !== null ? '✏️️ Editando Ficha Existente' : '➕ Registrar Nueva Ficha en Campo'"></h2>
         <button @click="mostrarFormulario = !mostrarFormulario" class="text-xs text-[#A3B18B] underline hover:text-white" x-text="mostrarFormulario ? 'Ocultar Formulario' : 'Mostrar Formulario'"></button>
       </div>
 
@@ -398,7 +406,7 @@
       { id: "#143", categoria: "Reptiles", nombreCientifico: "Pelamis platura", nombreComun: "Serpiente marina", estado: "VENENOSA", ubicacion: "GOLFO DE NICOYA / SANTA ROSA", habitat: "Aguas costeras y superficie marina", habitos: "Marina y pelágica", dieta: "Peces marinos pequeños", descripcion: "Cola aplanada en forma de remo. Habita zonas costeras.", imagen: "img/ficha_143.jpg.jfif", registrado: false },
       { id: "#144", categoria: "Reptiles", nombreCientifico: "Porthidium ophryomegas", nombreComun: "Toboba chinga / de tierra seca", estado: "VENENOSA", ubicacion: "GUANACASTE", habitat: "Suelo de bosque seco tropical", habitos: "Terrestre y nocturna", dieta: "Pequeños roedores y lagartijas", descripcion: "Víbora pequeña con fosetas termorreceptoras y patrones geométricos.", imagen: "img/ficha_144.jpg.jfif", registrado: false },
 
-      // NUEVAS FICHAS DE TORTUGAS MARINAS (#145 - #148)
+      // TORTUGAS MARINAS (#145 - #148)
       { id: "#145", categoria: "Reptiles", nombreCientifico: "Dermochelys coriacea", nombreComun: "Tortuga Baula", estado: "CR (En Peligro Crítico)", ubicacion: "PACÍFICO NORTE / ACG", habitat: "Océano abierto y playas de anidación", habitos: "Marina y altamente migratoria", dieta: "Carnívora especializada (medusas y organismos gelatinosos)", descripcion: "La tortuga marina más grande del mundo, con un caparazón flexible en forma de quillas.", imagen: "img/ficha_145.jpg.jfif", registrado: false },
       { id: "#146", categoria: "Reptiles", nombreCientifico: "Lepidochelys olivacea", nombreComun: "Tortuga Lora", estado: "VU (Vulnerable)", ubicacion: "PLAYA NANCITE (SANTA ROSA)", habitat: "Aguas costeras y playas arenosas del Pacífico", habitos: "Marina; famosa por sus llegadas masivas o 'arribadas'", dieta: "Omnívora (crustáceos, moluscos, peces y algas)", descripcion: "Protagonista de eventos masivos de anidación sincrónica en el Parque Nacional Santa Rosa.", imagen: "img/ficha_146.jpg.jfif", registrado: false },
       { id: "#147", categoria: "Reptiles", nombreCientifico: "Chelonia mydas", nombreComun: "Tortuga Verde", estado: "EN (En Peligro)", ubicacion: "GOLFO DE NICOYA / COSTAS ACG", habitat: "Praderas de pastos marinos y zonas costeras", habitos: "Marina y costera", dieta: "Herbívora estricta en etapa adulta (pastos marinos y algas)", descripcion: "Reconocida por el color verdoso de su grasa corporal, habita pastos marinos.", imagen: "img/ficha_147.jpg.jfif", registrado: false },
@@ -508,8 +516,8 @@
         },
 
         init() {
-          // Usamos 'v10' para cargar la base de datos actualizada con las tortugas marinas
-          const guardadas = localStorage.getItem('bioguia_guanacaste_especies_v10');
+          // Usamos 'v11' para actualizar el almacenamiento local con el icono de la app y las tortugas
+          const guardadas = localStorage.getItem('bioguia_guanacaste_especies_v11');
           if (guardadas) {
             this.especies = JSON.parse(guardadas);
           } else {
@@ -519,7 +527,7 @@
         },
 
         guardarEnStorage() {
-          localStorage.setItem('bioguia_guanacaste_especies_v10', JSON.stringify(this.especies));
+          localStorage.setItem('bioguia_guanacaste_especies_v11', JSON.stringify(this.especies));
         },
         
         get totalRegistrados() {
