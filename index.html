@@ -54,7 +54,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           <div>
             <label class="block text-stone-300 mb-1 font-semibold">Número de Ficha (#):</label>
-            <input type="text" x-model="nuevo.id" placeholder="Ej. #125" class="w-full bg-[#1C2317] border border-[#5C4033] rounded-xl p-2 text-white focus:outline-none focus:border-[#A3B18B]">
+            <input type="text" x-model="nuevo.id" placeholder="Ej. #145" class="w-full bg-[#1C2317] border border-[#5C4033] rounded-xl p-2 text-white focus:outline-none focus:border-[#A3B18B]">
           </div>
           <div>
             <label class="block text-stone-300 mb-1 font-semibold">Nombre Científico:</label>
@@ -102,7 +102,7 @@
           </div>
           <div>
             <label class="block text-stone-300 mb-1 font-semibold">Ruta Local de Imagen:</label>
-            <input type="text" x-model="nuevo.imagen" placeholder="img/ficha_124.jpg.jfif" class="w-full bg-[#1C2317] border border-[#5C4033] rounded-xl p-2 text-white focus:outline-none focus:border-[#A3B18B]">
+            <input type="text" x-model="nuevo.imagen" placeholder="img/ficha_145.jpg.jfif" class="w-full bg-[#1C2317] border border-[#5C4033] rounded-xl p-2 text-white focus:outline-none focus:border-[#A3B18B]">
           </div>
           <div>
             <label class="block text-stone-300 mb-1 font-semibold">Descripción:</label>
@@ -373,7 +373,30 @@
       { id: "#120", categoria: "Invertebrados", nombreCientifico: "Caligo spp.", nombreComun: "Mariposa Búho", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Sombras del bosque", habitos: "Crepuscular/Nocturna", dieta: "Frugívora (Jugos fermentados)", descripcion: "Grandes ocelos en las alas similares a ojos de búho.", imagen: "img/ficha_120.jpg.jfif", registrado: false },
       { id: "#121", categoria: "Invertebrados", nombreCientifico: "Morpho peleides", nombreComun: "Mariposa Morfo azul", estado: "LC (Seguro)", ubicacion: "NICOYA", habitat: "Quebradas sombreadas", habitos: "Diurna (Vuelo activo)", dieta: "Fluidos de fruta podrida", descripcion: "Destaca por el azul iridiscente metálico de sus alas.", imagen: "img/ficha_121.jpg.jfif", registrado: false },
       { id: "#122", categoria: "Invertebrados", nombreCientifico: "Aphonopelma spp.", nombreComun: "Tarántula de bajura", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Madrigueras de suelo", habitos: "Nocturna (Solitaria)", dieta: "Carnívora (Insectos)", descripcion: "Arácnido robusto que habita en galerías subterráneas.", imagen: "img/ficha_122.jpg.jfif", registrado: false },
-      { id: "#123", categoria: "Invertebrados", nombreCientifico: "Cardisoma guanhumi", nombreComun: "Cangrejo terrestre rojo", estado: "LC (Abundante)", ubicacion: "SANTA CRUZ", habitat: "Esteros y bajuras", habitos: "Fosas subterráneas", dieta: "Detritívora/Herbívora", descripcion: "Cangrejo de tierra que construye cuevas profundas.", imagen: "img/ficha_123.jpg.jfif", registrado: false }
+      { id: "#123", categoria: "Invertebrados", nombreCientifico: "Cardisoma guanhumi", nombreComun: "Cangrejo terrestre rojo", estado: "LC (Abundante)", ubicacion: "SANTA CRUZ", habitat: "Esteros y bajuras", habitos: "Fosas subterráneas", dieta: "Detritívora/Herbívora", descripcion: "Cangrejo de tierra que construye cuevas profundas.", imagen: "img/ficha_123.jpg.jfif", registrado: false },
+      
+      // NUEVAS FICHAS #124 A #144 (HERPETOFAUNA Y ANFIBIOS/REPTILES)
+      { id: "#124", categoria: "Anfibios", nombreCientifico: "Incilius luetkenii", nombreComun: "Sapo sabanero o de Lütken", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Sabanas, bajuras secas y áreas abiertas", habitos: "Terrestre (Oculto en estación seca)", dieta: "Insectívora generalista", descripcion: "Emerge masivamente con las primeras lluvias en el Pacífico seco.", imagen: "img/ficha_124.jpg.jfif", registrado: false },
+      { id: "#125", categoria: "Anfibios", nombreCientifico: "Incilius coniferus", nombreComun: "Sapo crestado", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Zonas boscosas y parches húmedos", habitos: "Nocturna y terrestre (hojarasca)", dieta: "Invertebrados terrestres", descripcion: "Frecuenta las cercanías de cuerpos de agua temporales.", imagen: "img/ficha_125.jpg.jfif", registrado: false },
+      { id: "#126", categoria: "Anfibios", nombreCientifico: "Smilisca phaeota", nombreComun: "Rana arborícola careta", estado: "LC (Seguro)", ubicacion: "PACÍFICO SECO", habitat: "Bajuras, charcas y bosques secundarios", habitos: "Nocturna y arborícola", dieta: "Insectos voladores y artrópodos", descripcion: "Desciende hacia los cuerpos de agua durante la época reproductiva.", imagen: "img/ficha_126.jpg.jfif", registrado: false },
+      { id: "#127", categoria: "Anfibios", nombreCientifico: "Scinax staufferi", nombreComun: "Rana arborícola de Stauffer", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Zacateras, matorrales y charcas", habitos: "Nocturna, altamente arborícola", dieta: "Microinsectos", descripcion: "Ranita pequeña frecuente sobre vegetación herbácea baja.", imagen: "img/ficha_127.jpg.jfif", registrado: false },
+      { id: "#128", categoria: "Anfibios", nombreCientifico: "Agalychnis callidryas", nombreComun: "Rana arborícola de ojos rojos", estado: "LC (Seguro)", ubicacion: "PENÍNSULA DE NICOYA", habitat: "Parches de bosque y galerías fluviales", habitos: "Nocturna y estrictamente arborícola", dieta: "Insectos nocturnos, polillas y grillos", descripcion: "Descansa de día pegada al envés de las hojas con los ojos cerrados.", imagen: "img/ficha_128.jpg.jfif", registrado: false },
+      { id: "#129", categoria: "Anfibios", nombreCientifico: "Trachycephalus typhonius", nombreComun: "Rana lechera gigante", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Árboles altos en bajuras y bosques secos", habitos: "Nocturna y arborícola", dieta: "Insectos grandes y vertebrados pequeños", descripcion: "Segrega una sustancia lechosa de defensa en su piel.", imagen: "img/ficha_129.jpg.jfif", registrado: false },
+      { id: "#130", categoria: "Anfibios", nombreCientifico: "Leptodactylus melanonotus", nombreComun: "Rana de pantano de labio blanco", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Orillas de charcas, pantanos y quebradas", habitos: "Terrestre y nocturna", dieta: "Insectos e invertebrados ribereños", descripcion: "Construye nidos de espuma flotantes para proteger sus huevos.", imagen: "img/ficha_130.jpg.jfif", registrado: false },
+      { id: "#131", categoria: "Anfibios", nombreCientifico: "Leptodactylus fragilis", nombreComun: "Rana de hojarasca", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Suelo de bosques secos y hojarasca", habitos: "Terrestre y críptica", dieta: "Pequeños artrópodos del suelo", descripcion: "Pasa oculta bajo la hojarasca seca protegiéndose de la desecación.", imagen: "img/ficha_131.jpg.jfif", registrado: false },
+      { id: "#132", categoria: "Anfibios", nombreCientifico: "Leptodactylus savagei", nombreComun: "Rana toro de Savage / ternero", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Charcas permanentes, ríos y quebradas", habitos: "Terrestre y acuática", dieta: "Carnívora oportunista", descripcion: "Posee una vocalización potente similar al mugido de un ternero.", imagen: "img/ficha_132.jpg.jfif", registrado: false },
+      { id: "#133", categoria: "Anfibios", nombreCientifico: "Dendrobates auratus", nombreComun: "Rana venenosa verde y negra", estado: "LC (Seguro)", ubicacion: "PENÍNSULA DE NICOYA", habitat: "Sectores húmedos del bosque seco", habitos: "Diurna y terrestre", dieta: "Ácaros, hormigas y formícidos", descripcion: "Exhibe aposematismo brillante y toxinas cutáneas.", imagen: "img/ficha_133.jpg.jfif", registrado: false },
+      { id: "#134", categoria: "Reptiles", nombreCientifico: "Spilotes pullatus", nombreComun: "Mica", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Árboles, arbustos y zonas boscosas", habitos: "Diurna, gran tamaño y agilidad", dieta: "Roedores, aves y pequeños mamíferos", descripcion: "Serpiente grande con patrón característico negro y bandas amarillas.", imagen: "img/ficha_134.jpg.jfif", registrado: false },
+      { id: "#135", categoria: "Reptiles", nombreCientifico: "Drymarchon melanurus", nombreComun: "Ratonerota / Zopilota", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Suelo de bosques secos y matorrales", habitos: "Terrestre y diurna", dieta: "Mamíferos, aves, reptiles y anfibios", descripcion: "Serpiente robusta y muy activa como cazadora en el suelo.", imagen: "img/ficha_135.jpg.jfif", registrado: false },
+      { id: "#136", categoria: "Reptiles", nombreCientifico: "Drymobius margaritiferus", nombreComun: "Guardacaminos", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Orillas de caminos, matorrales y charcas", habitos: "Diurna, de movimientos muy rápidos", dieta: "Anfibios y lagartijas", descripcion: "Escamas oscuras con bordes claros y destellos azulados/verdosos.", imagen: "img/ficha_136.jpg.jfif", registrado: false },
+      { id: "#137", categoria: "Reptiles", nombreCientifico: "Oxybelis aeneus", nombreComun: "Bejuquilla común", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Arbustos y árboles en zonas abiertas", habitos: "Arbórea y diurna", dieta: "Especializada en lagartijas y aves", descripcion: "Cuerpo sumamente delgado y cabeza puntiaguda.", imagen: "img/ficha_137.jpg.jfif", registrado: false },
+      { id: "#138", categoria: "Reptiles", nombreCientifico: "Oxybelis fulgidus", nombreComun: "Bejuquilla verde", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Estrato medio y alto de los árboles", habitos: "Arbórea y diurna", dieta: "Aves, lagartijas y mamíferos arbóreos", descripcion: "Color verde brillante que mimetiza perfectamente con el follaje.", imagen: "img/ficha_138.jpg.jfif", registrado: false },
+      { id: "#139", categoria: "Reptiles", nombreCientifico: "Imantodes cenchoa", nombreComun: "Bejuquilla ovejera / ojos de gato", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Vegetación baja y árboles", habitos: "Nocturna y arborícola", dieta: "Lagartijas durmientes y ranas", descripcion: "Cuerpo sumamente delgado y grandes ojos globosos nocturnos.", imagen: "img/ficha_139.jpg.jfif", registrado: false },
+      { id: "#140", categoria: "Reptiles", nombreCientifico: "Lampropeltis triangulum", nombreComun: "Falsa coral", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Suelo, hojarasca y troncos podridos", habitos: "Terrestre y oculta", dieta: "Otras serpientes, lagartijas y roedores", descripcion: "Especie mimética inofensiva (mimetismo batesiano).", imagen: "img/ficha_140.jpg.jfif", registrado: false },
+      { id: "#141", categoria: "Reptiles", nombreCientifico: "Ninia sebae", nombreComun: "Culebra platanera o de tierra", estado: "LC (Seguro)", ubicacion: "GUANACASTE", habitat: "Suelo, bajo piedras y hojarasca", habitos: "Terrestre fosorial", dieta: "Babosas y lombrices", descripcion: "Pequeña, de coloración rojiza con nuca negra.", imagen: "img/ficha_141.jpg.jfif", registrado: false },
+      { id: "#142", categoria: "Reptiles", nombreCientifico: "Micrurus nigrocinctus", nombreComun: "Coral macho / Verdadera", estado: "VENENOSA", ubicacion: "GUANACASTE", habitat: "Suelo, hojarasca y galerías", habitos: "Terrestre, secreta y pacífica", dieta: "Otras serpientes pequeñas y culebras ciegas", descripcion: "Altamente venenosa (neurotóxica). Anillos completos de color.", imagen: "img/ficha_142.jpg.jfif", registrado: false },
+      { id: "#143", categoria: "Reptiles", nombreCientifico: "Pelamis platura", nombreComun: "Serpiente marina", estado: "VENENOSA", ubicacion: "GOLFO DE NICOYA / SANTA ROSA", habitat: "Aguas costeras y superficie marina", habitos: "Marina y pelágica", dieta: "Peces marinos pequeños", descripcion: "Cola aplanada en forma de remo. Habita zonas costeras.", imagen: "img/ficha_143.jpg.jfif", registrado: false },
+      { id: "#144", categoria: "Reptiles", nombreCientifico: "Porthidium ophryomegas", nombreComun: "Toboba chinga / de tierra seca", estado: "VENENOSA", ubicacion: "GUANACASTE", habitat: "Suelo de bosque seco tropical", habitos: "Terrestre y nocturna", dieta: "Pequeños roedores y lagartijas", descripcion: "Víbora pequeña con fosetas termorreceptoras y patrones geométricos.", imagen: "img/ficha_144.jpg.jfif", registrado: false }
     ];
 
     const glosarioTerminos = [
@@ -465,7 +488,7 @@
         ultimoRangoNotificado: 0,
         registroActual: { fecha: '', coords: '', precision: '', observaciones: '' },
         nuevo: {
-          id: '#124',
+          id: '#145',
           nombreCientifico: '',
           nombreComun: '',
           categoria: 'Reptiles',
@@ -474,13 +497,13 @@
           habitat: '',
           habitos: '',
           dieta: '',
-          imagen: 'img/ficha_124.jpg.jfif',
+          imagen: 'img/ficha_145.jpg.jfif',
           descripcion: ''
         },
 
         init() {
-          // Usamos 'v8' para actualizar el almacenamiento local con el nuevo visor de imágenes completas
-          const guardadas = localStorage.getItem('bioguia_guanacaste_especies_v8');
+          // Usamos 'v9' para cargar la nueva base de datos actualizada en el almacenamiento local
+          const guardadas = localStorage.getItem('bioguia_guanacaste_especies_v9');
           if (guardadas) {
             this.especies = JSON.parse(guardadas);
           } else {
@@ -490,7 +513,7 @@
         },
 
         guardarEnStorage() {
-          localStorage.setItem('bioguia_guanacaste_especies_v8', JSON.stringify(this.especies));
+          localStorage.setItem('bioguia_guanacaste_especies_v9', JSON.stringify(this.especies));
         },
         
         get totalRegistrados() {
@@ -498,8 +521,8 @@
         },
         get rangoActual() {
           const total = this.totalRegistrados;
-          if (total >= 18) return { titulo: "Maestro del Bosque Seco 🦉", descripcion: "Dominio absoluto de la biodiversidad del Pacífico Norte." };
-          if (total >= 9) return { titulo: "Naturalista de Campo 🌿", descripcion: "Excelente ojo clínico para descubrir la fauna local." };
+          if (total >= 25) return { titulo: "Maestro del Bosque Seco 🦉", descripcion: "Dominio absoluto de la biodiversidad del Pacífico Norte." };
+          if (total >= 12) return { titulo: "Naturalista de Campo 🌿", descripcion: "Excelente ojo clínico para descubrir la fauna local." };
           return { titulo: "Explorador Novato 🌱", descripcion: "Primeros pasos firmes en el sendero. ¡Aventúrate más adentro!" };
         },
         get especiesFiltradas() {
@@ -539,7 +562,7 @@
             alert("¡Ficha actualizada con éxito!");
           } else {
             this.especies.unshift({
-              id: this.nuevo.id || `#12${this.especies.length}`,
+              id: this.nuevo.id || `#14${this.especies.length}`,
               categoria: this.nuevo.categoria,
               nombreCientifico: this.nuevo.nombreCientifico,
               nombreComun: this.nuevo.nombreComun,
@@ -549,7 +572,7 @@
               habitos: this.nuevo.habitos || 'Activo',
               dieta: this.nuevo.dieta || 'Generalista',
               descripcion: this.nuevo.descripcion || 'Individuo nuevo registrado en campo.',
-              imagen: this.nuevo.imagen || 'img/ficha_124.jpg.jfif',
+              imagen: this.nuevo.imagen || 'img/ficha_145.jpg.jfif',
               registrado: true,
               ultimaCaptura: {
                 fecha: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
@@ -569,7 +592,7 @@
         },
         cancelarEdicion() {
           this.editandoIndex = null;
-          this.nuevo = { id: '#124', nombreCientifico: '', nombreComun: '', categoria: 'Reptiles', ubicacion: 'GUANACASTE', estado: 'NUEVO', habitat: '', habitos: '', dieta: '', imagen: 'img/ficha_124.jpg.jfif', descripcion: '' };
+          this.nuevo = { id: '#145', nombreCientifico: '', nombreComun: '', categoria: 'Reptiles', ubicacion: 'GUANACASTE', estado: 'NUEVO', habitat: '', habitos: '', dieta: '', imagen: 'img/ficha_145.jpg.jfif', descripcion: '' };
           this.mostrarFormulario = false;
         },
         eliminarEspecie(id) {
