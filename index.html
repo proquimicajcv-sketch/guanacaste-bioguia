@@ -101,8 +101,8 @@
             <input type="text" x-model="nuevo.dieta" placeholder="Ej. Herbívora" class="w-full bg-[#1C2317] border border-[#5C4033] rounded-xl p-2 text-white focus:outline-none focus:border-[#A3B18B]">
           </div>
           <div>
-            <label class="block text-stone-300 mb-1 font-semibold">Ruta Local de Imagen (Ej. img/ficha_125.jpg):</label>
-            <input type="text" x-model="nuevo.imagen" placeholder="img/ficha_125.jpg" class="w-full bg-[#1C2317] border border-[#5C4033] rounded-xl p-2 text-white focus:outline-none focus:border-[#A3B18B]">
+            <label class="block text-stone-300 mb-1 font-semibold">Ruta Local de Imagen:</label>
+            <input type="text" x-model="nuevo.imagen" placeholder="img/ficha_124.jpg.jfif" class="w-full bg-[#1C2317] border border-[#5C4033] rounded-xl p-2 text-white focus:outline-none focus:border-[#A3B18B]">
           </div>
           <div>
             <label class="block text-stone-300 mb-1 font-semibold">Descripción:</label>
@@ -326,79 +326,32 @@
     </div>
   </div>
 
-  <!-- SCRIPT DE LÓGICA Y 24 TARJETAS OFICIALES DESDE #100 -->
+  <!-- SCRIPT DE LÓGICA Y DATOS LOCALES CON EXTENSIÓN .jpg.jfif -->
   <script>
     const especiesIniciales = [
-      // Ficha #100
-      { id: "#100", categoria: "Mamíferos", nombreCientifico: "Odocoileus virginianus", nombreComun: "Venado cola blanca", estado: "LC (Preocupación menor)", ubicacion: "GUANACASTE", habitat: "Bosque seco / Sabanas", habitos: "Diurna / Crepuscular", dieta: "Herbívora (Brotes y pastos)", descripcion: "Cérvido nativo de Costa Rica y América. Inofensivo y emblemático del bosque seco.", imagen: "img/ficha_100.jpg", registrado: false },
-      
-      // Ficha #101
+      { id: "#100", categoria: "Mamíferos", nombreCientifico: "Odocoileus virginianus", nombreComun: "Venado cola blanca", estado: "LC (Preocupación menor)", ubicacion: "GUANACASTE", habitat: "Bosque seco / Sabanas", habitos: "Diurna / Crepuscular", dieta: "Herbívora (Brotes y pastos)", descripcion: "Cérvido nativo de Costa Rica y América. Inofensivo y emblemático del bosque seco.", imagen: "img/ficha_100.jpg.jfif", registrado: false },
       { id: "#101", categoria: "Mamíferos", nombreCientifico: "Alouatta palliata", nombreComun: "Mono congo / Aullador", estado: "VU (Vulnerable)", ubicacion: "GUANACASTE", habitat: "Bosque seco maduro", habitos: "Diurna (Arbórea)", dieta: "Frugívora/Folívora", descripcion: "Famosos por sus potentes vocalizaciones audibles a kilómetros.", imagen: "img/ficha_101.jpg", registrado: false },
-      
-      // Ficha #102
       { id: "#102", categoria: "Mamíferos", nombreCientifico: "Cebus capucinus", nombreComun: "Mono cariblanco", estado: "LC (Preocupación)", ubicacion: "SANTA ROSA", habitat: "Bosque seco y parches", habitos: "Diurna (Social)", dieta: "Omnívora (Frutos/Insectos)", descripcion: "Primate altamente inteligente y diestro en el uso de herramientas.", imagen: "img/ficha_102.jpg", registrado: false },
-
-      // Ficha #103
       { id: "#103", categoria: "Mamíferos", nombreCientifico: "Pecari tajacu", nombreComun: "Saíno / Pecarí de collar", estado: "LC (Preocupación)", ubicacion: "GUANACASTE", habitat: "Suelo de bosque seco", habitos: "Diurna (En manada)", dieta: "Omnívora (Raíces/Frutos)", descripcion: "Viven en grupos familiares recorriendo el sotobosque en busca de alimento.", imagen: "img/ficha_103.jpg", registrado: false },
-
-      // Ficha #104
       { id: "#104", categoria: "Mamíferos", nombreCientifico: "Nasua narica", nombreComun: "Pizote / Coatí", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Senderos y áreas base", habitos: "Diurna (Grupal)", dieta: "Omnívora generalista", descripcion: "Reconocible por su larga cola anillada y hocico móvil.", imagen: "img/ficha_104.jpg", registrado: false },
-
-      // Ficha #105
       { id: "#105", categoria: "Mamíferos", nombreCientifico: "Procyon lotor", nombreComun: "Mapache", estado: "LC (Seguro)", ubicacion: "NICOYA", habitat: "Cercano a esteros/ríos", habitos: "Nocturna/Crepuscular", dieta: "Omnívora (Crustáceos)", descripcion: "Excelente adaptabilidad a zonas acuáticas y parches boscosos.", imagen: "img/ficha_105.jpg", registrado: false },
-
-      // Ficha #106
       { id: "#106", categoria: "Mamíferos", nombreCientifico: "Puma concolor", nombreComun: "Puma", estado: "NT (Casi amenazado)", ubicacion: "SANTA ROSA", habitat: "Núcleo de bosque seco", habitos: "Solitaria/Elusiva", dieta: "Carnívora (Mamíferos)", descripcion: "Felino de gran adaptabilidad, depredador tope en el área.", imagen: "img/ficha_106.jpg", registrado: false },
-
-      // Ficha #107
       { id: "#107", categoria: "Mamíferos", nombreCientifico: "Panthera onca", nombreComun: "Jaguar", estado: "NT (Monitoreado)", ubicacion: "SANTA ROSA", habitat: "Áreas protegidas densas", habitos: "Nocturna/Solitaria", dieta: "Carnívora estricta", descripcion: "El felino más grande de América, símbolo de conservación.", imagen: "img/ficha_107.jpg", registrado: false },
-
-      // Ficha #108
       { id: "#108", categoria: "Reptiles", nombreCientifico: "Crotalus simus", nombreComun: "Serpiente de cascabel", estado: "VENENOSA", ubicacion: "SANTA ROSA", habitat: "Zonas secas y abiertas", habitos: "Nocturna/Terrestre", dieta: "Carnívora (Roedores)", descripcion: "Posee sonajero córneo distintivo en la cola.", imagen: "img/ficha_108.jpg", registrado: false },
-
-      // Ficha #109
       { id: "#109", categoria: "Reptiles", nombreCientifico: "Bothrops asper", nombreComun: "Terciopelo", estado: "VENENOSA", ubicacion: "GUANACASTE", habitat: "Quebradas y bajuras", habitos: "Nocturna/Emboscada", dieta: "Carnívora (Pequeños vertebrados)", descripcion: "Viperino de hábitos sigilosos y gran importancia médica.", imagen: "img/ficha_109.jpg", registrado: false },
-
-      // Ficha #110
       { id: "#110", categoria: "Reptiles", nombreCientifico: "Boa imperator", nombreComun: "Boa constrictor", estado: "INOFENSIVA", ubicacion: "NICOYA", habitat: "Árboles y bajuras", habitos: "Nocturna/Arbórea", dieta: "Carnívora (Constricción)", descripcion: "Gran serpiente constrictora de patrones geométricos dorsales.", imagen: "img/ficha_110.jpg", registrado: false },
-
-      // Ficha #111
       { id: "#111", categoria: "Reptiles", nombreCientifico: "Ctenosaura similis", nombreComun: "Garrobo / Iguana negra", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Suelo y troncos secos", habitos: "Diurna (Heliófila)", dieta: "Herbívora/Omnívora", descripcion: "El lagarto más rápido del mundo, activo tomando sol sobre rocas.", imagen: "img/ficha_111.jpg", registrado: false },
-
-      // Ficha #112
       { id: "#112", categoria: "Anfibios", nombreCientifico: "Rhinella horribilis", nombreComun: "Sapo gigante / Común", estado: "LC (Abundante)", ubicacion: "GUANACASTE", habitat: "Charcas temporales", habitos: "Nocturna", dieta: "Insectívora generalista", descripcion: "Robustos anfibios que emergen masivamente con las primeras lluvias.", imagen: "img/ficha_112.jpg", registrado: false },
-
-      // Ficha #113
       { id: "#113", categoria: "Anfibios", nombreCientifico: "Smilisca baudinii", nombreComun: "Rana arborícola mexicana", estado: "LC (Seguro)", ubicacion: "NICOYA", habitat: "Bajuras y charcas", habitos: "Nocturna (Arbórea)", dieta: "Insectos voladores", descripcion: "Ranita arborícola con capacidad de cambiar de tonalidad.", imagen: "img/ficha_113.jpg", registrado: false },
-
-      // Ficha #114
       { id: "#114", categoria: "Anfibios", nombreCientifico: "Engystomops pustulosus", nombreComun: "Rana túngara", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Charcas temporales", habitos: "Nocturna (Suelo)", dieta: "Microinsectos/Hormigas", descripcion: "Famosa por sus complejos cantos flotantes en charcos comunales.", imagen: "img/ficha_114.jpg", registrado: false },
-
-      // Ficha #115
       { id: "#115", categoria: "Anfibios", nombreCientifico: "Rhinophrynus dorsalis", nombreComun: "Sapo cavador mexicano", estado: "LC (Especial)", ubicacion: "GUANACASTE", habitat: "Suelo arenoso/Subterráneo", habitos: "Fosas subterráneas", dieta: "Especializada en termitas", descripcion: "Anfibio de cuerpo regordete adaptado para cavar de espaldas.", imagen: "img/ficha_115.jpg", registrado: false },
-
-      // Ficha #116
       { id: "#116", categoria: "Aves", nombreCientifico: "Calocitta formosa", nombreComun: "Urraca hermosa / Pelona", estado: "LC (Muy común)", ubicacion: "SANTA ROSA", habitat: "Copas de bosque seco", habitos: "Diurna (Bandadas)", dieta: "Omnívora (Frutos/Insectos)", descripcion: "Ave bulliciosa con larga cola y cresta llamativa.", imagen: "img/ficha_116.jpg", registrado: false },
-
-      // Ficha #117
       { id: "#117", categoria: "Aves", nombreCientifico: "Eumomota superciliosa", nombreComun: "Momoto cejiturquesa / Toledo", estado: "LC (Seguro)", ubicacion: "NICOYA", habitat: "Taludes y matorrales", habitos: "Diurna (Sedentaria)", dieta: "Insectívora/Pequeños frutos", descripcion: "Reconocible por su cola en forma de péndulo.", imagen: "img/ficha_117.jpg", registrado: false },
-
-      // Ficha #118
       { id: "#118", categoria: "Aves", nombreCientifico: "Amazona auropalliata", nombreComun: "Lora nuca amarilla", estado: "EN (En peligro)", ubicacion: "SANTA ROSA", habitat: "Árboles maduros altos", habitos: "Diurna (En parejas)", dieta: "Frugívora (Semillas/Frutos)", descripcion: "Lora de plumaje verde brillante y nuca dorada.", imagen: "img/ficha_118.jpg", registrado: false },
-
-      // Ficha #119
       { id: "#119", categoria: "Aves", nombreCientifico: "Crax rubra", nombreComun: "Pava crestada", estado: "VU (Vulnerable)", ubicacion: "GUANACASTE", habitat: "Suelo de bosque maduro", habitos: "Diurna (Terrestre)", dieta: "Frugívora (Caídos al suelo)", descripcion: "Gran ave gallinácea que camina silenciosa entre la hojarasca.", imagen: "img/ficha_119.jpg", registrado: false },
-
-      // Ficha #120
       { id: "#120", categoria: "Invertebrados", nombreCientifico: "Caligo spp.", nombreComun: "Mariposa Búho", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Sombras del bosque", habitos: "Crepuscular/Nocturna", dieta: "Frugívora (Jugos fermentados)", descripcion: "Grandes ocelos en las alas similares a ojos de búho.", imagen: "img/ficha_120.jpg", registrado: false },
-
-      // Ficha #121
       { id: "#121", categoria: "Invertebrados", nombreCientifico: "Morpho peleides", nombreComun: "Mariposa Morfo azul", estado: "LC (Seguro)", ubicacion: "NICOYA", habitat: "Quebradas sombreadas", habitos: "Diurna (Vuelo activo)", dieta: "Fluidos de fruta podrida", descripcion: "Destaca por el azul iridiscente metálico de sus alas.", imagen: "img/ficha_121.jpg", registrado: false },
-
-      // Ficha #122
       { id: "#122", categoria: "Invertebrados", nombreCientifico: "Aphonopelma spp.", nombreComun: "Tarántula de bajura", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Madrigueras de suelo", habitos: "Nocturna (Solitaria)", dieta: "Carnívora (Insectos)", descripcion: "Arácnido robusto que habita en galerías subterráneas.", imagen: "img/ficha_122.jpg", registrado: false },
-
-      // Ficha #123
       { id: "#123", categoria: "Invertebrados", nombreCientifico: "Cardisoma guanhumi", nombreComun: "Cangrejo terrestre rojo", estado: "LC (Abundante)", ubicacion: "SANTA CRUZ", habitat: "Esteros y bajuras", habitos: "Fosas subterráneas", dieta: "Detritívora/Herbívora", descripcion: "Cangrejo de tierra que construye cuevas profundas.", imagen: "img/ficha_123.jpg", registrado: false }
     ];
 
@@ -461,7 +414,7 @@
       { pregunta: "¿Qué significa 'LC' según la UICN?", opciones: ["A) En peligro crítico", "B) Preocupación Menor / Seguro", "C) En cautiverio"], correcta: 1 },
       { pregunta: "¿Hábitat preferido del venado cola blanca?", opciones: ["A) Bosques nubosos", "B) Sabanas y bordes de bosque seco", "C) Manglares salinos"], correcta: 1 },
       { pregunta: "¿Característica de Morpho peleides?", opciones: ["A) Café oscuro", "B) Alas de azul iridiscente brillante", "C) Vuelo nocturno"], correcta: 1 },
-      { pregunta: "¿Cómo actúan las plantas epífitas?", opciones: ["A) Parásitas de savia", "B) Viven sobre árboles buscando luz sin dañarlos", "C) Aцеleran pudrición"], correcta: 1 },
+      { pregunta: "¿Cómo actúan las plantas epífitas?", opciones: ["A) Parásitas de savia", "B) Viven sobre árboles buscando luz sin dañarlos", "C) Aceleran pudrición"], correcta: 1 },
       { pregunta: "¿Animal que hace cuevas en suelo arenoso?", opciones: ["A) Sapo cavador", "B) Boa constrictor", "C) Mono cariblanco"], correcta: 0 },
       { pregunta: "¿Qué es un microclima en campo?", opciones: ["A) Climatización artificial", "B) Zona específica con mayor humedad y sombra", "C) Sector sin vegetación"], correcta: 1 },
       { pregunta: "¿Por qué los pizotes andan en bandas?", opciones: ["A) Protección mutua contra depredadores", "B) Son solitarios agresivos", "C) Para competir con jaguares"], correcta: 0 },
@@ -503,8 +456,8 @@
         },
 
         init() {
-          // Usamos 'v4' para limpiar cualquier caché anterior del navegador de inmediato
-          const guardadas = localStorage.getItem('bioguia_guanacaste_especies_v4');
+          // Usamos 'v5' para forzar al navegador a actualizar las tarjetas con la extensión correcta
+          const guardadas = localStorage.getItem('bioguia_guanacaste_especies_v5');
           if (guardadas) {
             this.especies = JSON.parse(guardadas);
           } else {
@@ -514,7 +467,7 @@
         },
 
         guardarEnStorage() {
-          localStorage.setItem('bioguia_guanacaste_especies_v4', JSON.stringify(this.especies));
+          localStorage.setItem('bioguia_guanacaste_especies_v5', JSON.stringify(this.especies));
         },
         
         get totalRegistrados() {
