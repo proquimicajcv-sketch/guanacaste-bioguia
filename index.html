@@ -46,7 +46,7 @@
     <!-- ESPACIO DE EDICIÓN EN CAMPO: NUEVO INDIVIDUO O EDICIÓN -->
     <div class="bg-[#1E2419]/95 border-2 border-[#A3B18B]/60 rounded-2xl p-4 md:p-6 shadow-2xl backdrop-blur">
       <div class="flex justify-between items-center mb-3">
-        <h2 class="text-sm font-bold text-[#CCD5AE] uppercase tracking-wider flex items-center gap-2" x-text="editandoIndex !== null ? '✏️️ Editando Ficha Existente' : '➕ Registrar Nuevo Hallazgo / Especie en Campo'"></h2>
+        <h2 class="text-sm font-bold text-[#CCD5AE] uppercase tracking-wider flex items-center gap-2" x-text="editandoIndex !== null ? '✏️ Editando Ficha Existente' : '➕ Registrar Nuevo Hallazgo / Especie en Campo'"></h2>
         <button @click="mostrarFormulario = !mostrarFormulario" class="text-xs text-[#A3B18B] underline hover:text-white" x-text="mostrarFormulario ? 'Ocultar Formulario' : 'Mostrar Formulario'"></button>
       </div>
 
@@ -329,12 +329,16 @@
   <!-- SCRIPT DE LÓGICA Y DATOS PERSISTENTES -->
   <script>
     const especiesIniciales = [
-      // Tarjeta #100 (Venado cola blanca con tu URL de internet)
+      // Tarjeta #100 (Venado cola blanca)
       { id: "#100", categoria: "Mamíferos", nombreCientifico: "Odocoileus virginianus", nombreComun: "Venado cola blanca", estado: "LC (Preocupación menor)", ubicacion: "GUANACASTE", habitat: "Bosque seco / Sabanas", habitos: "Diurna / Crepuscular", dieta: "Herbívora (Brotes y pastos)", descripcion: "Cérvido nativo de Costa Rica y América. Inofensivo y emblemático del bosque seco.", imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzEUiJn5KSfXbB2VW0olzkWyakeGL2ex-m1Htr1NLNoGNZwja_5qeGtSM&s=10", registrado: false },
       
-      // Catálogo Oficial ACG (#002 - #024)
-      { id: "#002", categoria: "Mamíferos", nombreCientifico: "Alouatta palliata", nombreComun: "Mono congo / Aullador", estado: "VU (Vulnerable)", ubicacion: "GUANACASTE", habitat: "Bosque seco maduro", habitos: "Diurna (Arbórea)", dieta: "Frugívora/Folívora", descripcion: "Famosos por sus potentes vocalizaciones audibles a kilómetros.", imagen: "https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?auto=format&fit=crop&w=600&q=80", registrado: false },
-      { id: "#003", categoria: "Mamíferos", nombreCientifico: "Cebus capucinus", nombreComun: "Mono cariblanco", estado: "LC (Preocupación)", ubicacion: "SANTA ROSA", habitat: "Bosque seco y parches", habitos: "Diurna (Social)", dieta: "Omnívora (Frutos/Insectos)", descripcion: "Primate altamente inteligente y diestro en el uso de herramientas.", imagen: "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=600&q=80", registrado: false },
+      // Tarjeta #002 (Mono congo / Alouatta palliata - URL Actualizada)[cite: 24]
+      { id: "#002", categoria: "Mamíferos", nombreCientifico: "Alouatta palliata", nombreComun: "Mono congo / Aullador", estado: "VU (Vulnerable)", ubicacion: "GUANACASTE", habitat: "Bosque seco maduro", habitos: "Diurna (Arbórea)", dieta: "Frugívora/Folívora", descripcion: "Famosos por sus potentes vocalizaciones audibles a kilómetros.", imagen: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQV6T3W4hep_0Y42aei17S1HRfhhREl0QKiGU9GWYivkSSbccJgZ966JZ5z&s=10", registrado: false },
+      
+      // Tarjeta #003 (Mono cariblanco / Cebus capucinus - URL Actualizada)[cite: 24]
+      { id: "#003", categoria: "Mamíferos", nombreCientifico: "Cebus capucinus", nombreComun: "Mono cariblanco", estado: "LC (Preocupación)", ubicacion: "SANTA ROSA", habitat: "Bosque seco y parches", habitos: "Diurna (Social)", dieta: "Omnívora (Frutos/Insectos)", descripcion: "Primate altamente inteligente y diestro en el uso de herramientas.", imagen: "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b2/Cebus_capucinus_social.JPG/250px-Cebus_capucinus_social.JPG?utm_source=es.wikipedia.org&utm_campaign=parser&utm_content=thumbnail", registrado: false },
+
+      // Catálogo Oficial ACG (#004 - #024)
       { id: "#004", categoria: "Mamíferos", nombreCientifico: "Pecari tajacu", nombreComun: "Saíno / Pecarí de collar", estado: "LC (Preocupación)", ubicacion: "GUANACASTE", habitat: "Suelo de bosque seco", habitos: "Diurna (En manada)", dieta: "Omnívora (Raíces/Frutos)", descripcion: "Viven en grupos familiares recorriendo el sotobosque en busca de alimento.", imagen: "https://images.unsplash.com/photo-1596715693630-f6c0d33e2154?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#005", categoria: "Mamíferos", nombreCientifico: "Nasua narica", nombreComun: "Pizote / Coatí", estado: "LC (Seguro)", ubicacion: "SANTA ROSA", habitat: "Senderos y áreas base", habitos: "Diurna (Grupal)", dieta: "Omnívora generalista", descripcion: "Reconocible por su larga cola anillada y hocico móvil.", imagen: "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=600&q=80", registrado: false },
       { id: "#006", categoria: "Mamíferos", nombreCientifico: "Procyon lotor", nombreComun: "Mapache", estado: "LC (Seguro)", ubicacion: "NICOYA", habitat: "Cercano a esteros/ríos", habitos: "Nocturna/Crepuscular", dieta: "Omnívora (Crustáceos)", descripcion: "Excelente adaptabilidad a zonas acuáticas y parches boscosos.", imagen: "https://images.unsplash.com/photo-1554659960-398d23498616?auto=format&fit=crop&w=600&q=80", registrado: false },
