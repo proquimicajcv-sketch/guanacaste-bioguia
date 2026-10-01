@@ -20,10 +20,10 @@
       <!-- Botones Superiores de Navegación -->
       <div class="flex items-center gap-2 flex-wrap">
         <button @click="modalGlosario = true" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-emerald-700 flex items-center gap-1.5">
-          📖 Glosario
+          📖 Glosario (<span x-text="glosarioTerminos.length"></span>)
         </button>
-        <button @click="modalTrivia = true" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-emerald-700 flex items-center gap-1.5">
-          🎮 Trivia
+        <button @click="abrirTrivia()" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-emerald-700 flex items-center gap-1.5">
+          🎮 Trivia (<span x-text="triviaPreguntas.length"></span>)
         </button>
         <button @click="modalReporte = true" class="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-emerald-500 flex items-center gap-1.5">
           📋 <span x-text="totalRegistrados"></span>
@@ -200,35 +200,43 @@
     </div>
   </div>
 
-  <!-- MODAL: GLOSARIO -->
+  <!-- MODAL: GLOSARIO (30 TÉRMINOS) -->
   <div x-show="modalGlosario" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
-    <div class="bg-emerald-900 border border-emerald-700 rounded-2xl max-w-xl w-full p-6 space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto text-stone-100">
+    <div class="bg-emerald-900 border border-emerald-700 rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto text-stone-100">
       <div class="flex justify-between items-center border-b border-emerald-800 pb-3">
-        <h2 class="text-lg font-bold text-emerald-300">📖 Glosario Científico de Campo</h2>
+        <h2 class="text-lg font-bold text-emerald-300">📖 Glosario Científico de Campo (30 Términos)</h2>
         <button @click="modalGlosario = false" class="text-emerald-300 text-xl font-bold">&times;</button>
       </div>
       <div class="space-y-3 text-xs">
-        <div class="bg-emerald-950 p-3 rounded-xl border border-emerald-800"><strong class="text-emerald-300 block text-sm">Herpetología</strong> Disciplina encargada del estudio de los anfibios y reptiles.</div>
-        <div class="bg-emerald-950 p-3 rounded-xl border border-emerald-800"><strong class="text-emerald-300 block text-sm">Endemismo</strong> Condición en la cual una especie es nativa y exclusiva de una región geográfica restringida.</div>
-        <div class="bg-emerald-950 p-3 rounded-xl border border-emerald-800"><strong class="text-emerald-300 block text-sm">Criptpsis</strong> Adaptación evolutiva que permite a un organismo pasar desapercibido ante sus depredadores.</div>
-        <div class="bg-emerald-950 p-3 rounded-xl border border-emerald-800"><strong class="text-emerald-300 block text-sm">Sotobosque</strong> Capa de vegetación arbustiva y herbácea ubicada justo debajo del dosel del bosque seco.</div>
+        <template x-for="item in glosarioTerminos" :key="item.term">
+          <div class="bg-emerald-950 p-3 rounded-xl border border-emerald-800">
+            <strong class="text-emerald-300 block text-sm mb-1" x-text="item.term"></strong>
+            <span class="text-emerald-100/90" x-text="item.def"></span>
+          </div>
+        </template>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: TRIVIA -->
+  <!-- MODAL: TRIVIA INTERACTIVA (30 PREGUNTAS) -->
   <div x-show="modalTrivia" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
-    <div class="bg-emerald-900 border border-emerald-700 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl text-stone-100">
+    <div class="bg-emerald-900 border border-emerald-700 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl text-stone-100">
       <div class="flex justify-between items-center border-b border-emerald-800 pb-3">
-        <h2 class="text-base font-bold text-emerald-300">🎮 Trivia de Biología y Campo</h2>
+        <div>
+          <span class="text-xs text-emerald-300 font-mono" x-text="`Pregunta ${triviaIndex + 1} de ${triviaPreguntas.length} | Aciertos: ${triviaAciertos}`"></span>
+          <h2 class="text-base font-bold text-white">🎮 Reto Científico de Campo</h2>
+        </div>
         <button @click="modalTrivia = false" class="text-emerald-300 text-xl font-bold">&times;</button>
       </div>
-      <div class="space-y-3 text-sm">
-        <p class="font-semibold text-white">¿Cuál es una adaptación clave de la herpetofauna en el Bosque Seco durante la estación seca?</p>
+      
+      <div class="space-y-4 py-2" x-data="{ seleccion: null }">
+        <p class="font-semibold text-sm text-emerald-100" x-text="triviaPreguntas[triviaIndex].pregunta"></p>
         <div class="space-y-2">
-          <button class="w-full text-left bg-emerald-950 hover:bg-emerald-800 p-3 rounded-xl border border-emerald-800 text-xs transition">A) Migración masiva hacia la costa</button>
-          <button class="w-full text-left bg-emerald-950 hover:bg-emerald-800 p-3 rounded-xl border border-emerald-800 text-xs transition">B) Estivación y refugio subterráneo</button>
-          <button class="w-full text-left bg-emerald-950 hover:bg-emerald-800 p-3 rounded-xl border border-emerald-800 text-xs transition">C) Cambio total de dieta a herbívora</button>
+          <template x-for="(opcion, idx) in triviaPreguntas[triviaIndex].opciones" :key="idx">
+            <button @click="responderTrivia(idx)" 
+              class="w-full text-left bg-emerald-950 hover:bg-emerald-800 p-3 rounded-xl border border-emerald-800 text-xs transition text-emerald-200 hover:text-white"
+              x-text="opcion"></button>
+          </template>
         </div>
       </div>
     </div>
@@ -245,12 +253,82 @@
       { id: "#006", categoria: "Invertebrados", nombreCientifico: "Morpho peleides", nombreComun: "Mariposa Morfo azul", estado: "LC", habitat: "Quebradas", habitos: "Diurna", dieta: "Fluidos", descripcion: "Azul iridiscente metálico.", imagen: "https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&w=600&q=80", registrado: false }
     ];
 
+    const glosarioTerminos = [
+      { term: "Caducifolio / Deciduo", def: "Condición de los árboles que pierden todas sus hojas durante la estación seca para minimizar la pérdida de agua." },
+      { term: "Estivación", def: "Estado de letargo o dormancia en el que entran algunos anfibios y reptiles durante los meses más secos y calurosos." },
+      { term: "Dosel", def: "Capa superior de los árboles más altos que forma un techo continuo sobre el bosque." },
+      { term: "Sotobosque", def: "Estrato de vegetación arbustiva y herbácea situado inmediatamente debajo del dosel." },
+      { term: "Epífita", def: "Planta que crece sobre otra (orquídeas, bromelias) usándolas solo como soporte físico sin robarles nutrientes." },
+      { term: "Mutualismo", def: "Interacción biológica simbiótica donde ambas especies salen beneficiadas." },
+      { term: "Endemismo", def: "Condición de especies nativas y exclusivas de un área geográfica muy delimitada." },
+      { term: "Herpetofauna", def: "Conjunto de anfibios y reptiles que habitan en un ecosistema." },
+      { term: "Criptpsis", def: "Adaptación de coloración que permite a un organismo pasar desapercibido (camuflaje)." },
+      { term: "Aposematismo", def: "Coloración de advertencia llamativa que indica que el animal es tóxico o venenoso." },
+      { term: "Mimetismo Batesiano", def: "Fenómeno en el cual una especie inofensiva imita a una peligrosa o tóxica." },
+      { term: "Frugivoría", def: "Hábito alimenticio enfocado en el consumo de frutos, clave para dispersar semillas." },
+      { term: "Zonificación ecológica", def: "Distribución de flora y fauna según gradientes de humedad, altitud y suelos." },
+      { term: "Sucesión ecológica", def: "Proceso natural de recuperación de un ecosistema tras una perturbación." },
+      { term: "Charca temporal / Estacional", def: "Cuerpos de agua efímeros formados en época lluviosa, vitales para anfibios." },
+      { term: "Especie clave (Keystone species)", def: "Organismo que ejerce un efecto desproporcionado sobre la estructura ecológica." },
+      { term: "Depredador tope", def: "Animal en la cúspide de la cadena trófica sin depredadores naturales." },
+      { term: "Polinización anemófila", def: "Polinización transportada por la acción del viento." },
+      { term: "Microclima", def: "Clima local condicionado por sombra, humedad de quebradas o rocas." },
+      { term: "Sabana tropical", def: "Ecosistema plano caracterizado por gramíneas y árboles espinosos espaciados." },
+      { term: "Bosque de galería", def: "Franja boscosa que crece bordeando los ríos y cursos de agua." },
+      { term: "Heliófilo", def: "Organismo que requiere luz solar directa para regular su temperatura." },
+      { term: "Detritívoro", def: "Organismo que se alimenta de materia orgánica en descomposición." },
+      { term: "Dispersión zoocórica", def: "Dispersión de semillas realizada activamente por animales." },
+      { term: "Poiquilotermia", def: "Regulación térmica dependiente de fuentes externas de calor." },
+      { term: "Biomasa", def: "Cantidad total de materia viva en un área o ecosistema." },
+      { term: "Especie migratoria", def: "Organismos que se desplazan según la temporada climática." },
+      { term: "Xerofitismo", def: "Adaptaciones de plantas para resistir la escasez extrema de agua." },
+      { term: "Nicho ecológico", def: "Rol y espacio funcional que ocupa una especie en su hábitat." },
+      { term: "Biodiversidad", def: "Variedad de la vida a escala local, regional y de ecosistemas." }
+    ];
+
+    const triviaPreguntas = [
+      { pregunta: "¿Qué estrategia principal emplean los árboles del bosque seco durante la estación seca?", opciones: ["A) Crecen el doble de rápido", "B) Pierden sus hojas para evitar deshidratación", "C) Desarrollan raíces aéreas"], correcta: 1 },
+      { pregunta: "¿Cuál de los siguientes mamíferos es un depredador tope en el Bosque Seco?", opciones: ["A) El pizote", "B) El venado cola blanca", "C) El jaguar (Panthera onca)"], correcta: 2 },
+      { pregunta: "¿Qué disciplina científica estudia a los anfibios y reptiles?", opciones: ["A) Mastozoología", "B) Herpetología", "C) Ornitología"], correcta: 1 },
+      { pregunta: "¿Qué adaptación presentan los sapos cavadores?", opciones: ["A) Se entierran de espaldas y comen termitas", "B) Vuelven a ríos permanentes", "C) Migran a cumbres nubosas"], correcta: 0 },
+      { pregunta: "¿Qué destaca visualmente al momoto cejiturquesa (Toledo)?", opciones: ["A) Plumaje blanco", "B) Larga cola en forma de péndulo", "C) Pico luminoso"], correcta: 1 },
+      { pregunta: "¿Qué función cumplen murciélagos frugívoros y aves?", opciones: ["A) Polinización y dispersión de semillas", "B) Erosión del suelo", "C) Control de grandes mamíferos"], correcta: 0 },
+      { pregunta: "¿A qué se debe el potente sonido de los monos congo?", opciones: ["A) Hueso hioides hipertrofiado como caja de resonancia", "B) Problemas respiratorios", "C) Llamadas nocturnas"], correcta: 0 },
+      { pregunta: "¿Cuál es el hábitat de reproducción de los anfibios del bosque seco?", opciones: ["A) Copas de árboles altos", "B) Charcas temporales por las lluvias", "C) Corrientes rápidas"], correcta: 1 },
+      { pregunta: "¿Qué significa el estado 'EN' (En Peligro)?", opciones: ["A) Sumamente abundante", "B) Riesgo muy alto de extinción silvestre", "C) Extinto globalmente"], correcta: 1 },
+      { pregunta: "¿Cómo regula su temperatura el garrobo negro?", opciones: ["A) Nocturno subterráneo", "B) Tomando sol sobre rocas (heliófilo)", "C) Acuático estricto"], correcta: 1 },
+      { pregunta: "¿Qué dieta caracteriza al saíno?", opciones: ["A) Carnívora estricta", "B) Omnívora (frutos, raíces, insectos)", "C) Exclusivamente nectívora"], correcta: 1 },
+      { pregunta: "¿Cómo se diferencian los anillos de una coral verdadera?", opciones: ["A) Bandas rojas separadas por blancas/amarillas", "B) Sin patrones definidos", "C) Ojos azules"], correcta: 0 },
+      { pregunta: "¿Cuál es la función del cascabel en Crotalus simus?", opciones: ["A) Atraer presas", "B) Emitir advertencia acústica ante amenazas", "C) Almacenar agua"], correcta: 1 },
+      { pregunta: "¿Cómo se llaman los bosques que crecen junto a los ríos?", opciones: ["A) Bosques de galería", "B) Páramos secos", "C) Manglares de altura"], correcta: 0 },
+      { pregunta: "¿Qué estrategia usan las mariposas Búho?", opciones: ["A) Emiten ultrasonidos", "B) Ocelos en forma de ojos grandes en las alas", "C) Segregan ácido"], correcta: 1 },
+      { pregunta: "¿Qué representa el 'Sotobosque'?", opciones: ["A) Raíces profundas", "B) Capa baja de arbustos bajo los árboles altos", "C) Atmósfera sobre el dosel"], correcta: 1 },
+      { pregunta: "¿Cuál es el felino más pequeño común en el área?", opciones: ["A) Jaguar", "B) Puma", "C) Caucel / Yaguarundí"], correcta: 2 },
+      { pregunta: "¿Qué rol cumplen los zompopos?", opciones: ["A) Plagas destructivas", "B) Cultivan hongos subterráneos y airean el suelo", "C) Fabrican nidos acuáticos"], correcta: 1 },
+      { pregunta: "¿Por qué la estación seca es un reto severo?", opciones: ["A) Escasez crítica de agua y recursos", "B) Bajas temperaturas bajo cero", "C) Inundación masiva"], correcta: 0 },
+      { pregunta: "¿Qué es el mimetismo?", opciones: ["A) Parecerse a otra especie o entorno para sobrevivir", "B) Enfermedad de la piel", "C) Muda de caparazón"], correcta: 0 },
+      { pregunta: "¿Ave bulliciosa con larga cola azul/gris?", opciones: ["A) Quetzal", "B) Urraca hermosa (Calocitta formosa)", "C) Tucán"], correcta: 1 },
+      { pregunta: "¿Qué dispara el canto de anfibios al inicio del invierno?", opciones: ["A) Primeras lluvias y cambio de presión", "B) Contaminación lumínica", "C) Escasez de insectos"], correcta: 0 },
+      { pregunta: "¿Qué significa 'LC' según la UICN?", opciones: ["A) En peligro crítico", "B) Preocupación Menor / Seguro", "C) En cautiverio"], correcta: 1 },
+      { pregunta: "¿Hábitat preferido del venado cola blanca?", opciones: ["A) Bosques nubosos", "B) Sabanas y bordes de bosque seco", "C) Manglares salinos"], correcta: 1 },
+      { pregunta: "¿Característica de Morpho peleides?", opciones: ["A) Café oscuro", "B) Alas de azul iridiscente brillante", "C) Vuelo nocturno"], correcta: 1 },
+      { pregunta: "¿Cómo actúan las plantas epífitas?", opciones: ["A) Parásitas de savia", "B) Viven sobre árboles buscando luz sin dañarlos", "C) Aceleran pudrición"], correcta: 1 },
+      { pregunta: "¿Animal que hace cuevas en suelo arenoso?", opciones: ["A) Sapo cavador", "B) Boa constrictor", "C) Mono cariblanco"], correcta: 0 },
+      { pregunta: "¿Qué es un microclima en campo?", opciones: ["A) Climatización artificial", "B) Zona específica con mayor humedad y sombra", "C) Sector sin vegetación"], correcta: 1 },
+      { pregunta: "¿Por qué los pizotes andan en bandas?", opciones: ["A) Protección mutua contra depredadores", "B) Son solitarios agresivos", "C) Para competir con jaguares"], correcta: 0 },
+      { pregunta: "¿Importancia de registrar GPS y microclimas?", opciones: ["A) Adorno en libreta", "B) Documentar patrones ecológicos reales y ciencia ciudadana", "C) Gastar batería"], correcta: 1 }
+    ];
+
     function guanacasteApp() {
       return {
         busqueda: '',
         categoriaActiva: 'Todos',
         categorias: ['Todos', 'Mamíferos', 'Reptiles', 'Anfibios', 'Aves', 'Invertebrados'],
         especies: especiesGuanacaste,
+        glosarioTerminos: glosarioTerminos,
+        triviaPreguntas: triviaPreguntas,
+        triviaIndex: 0,
+        triviaAciertos: 0,
         modalAbierto: false,
         modalReporte: false,
         modalGlosario: false,
@@ -282,7 +360,6 @@
         },
         verificarRangoAutomatico() {
           const total = this.totalRegistrados;
-          // Cada 3 avistamientos muestra la alerta emergente
           if (total > 0 && total % 3 === 0 && total !== this.ultimoRangoNotificado) {
             this.ultimoRangoNotificado = total;
             this.modalRangoAlerta = true;
@@ -328,6 +405,21 @@
               this.verificarRangoAutomatico();
             }
           }
+        },
+        abrirTrivia() {
+          this.triviaIndex = Math.floor(Math.random() * this.triviaPreguntas.length);
+          this.modalTrivia = true;
+        },
+        responderTrivia(idx) {
+          const preguntaActual = this.triviaPreguntas[this.triviaIndex];
+          if (idx === preguntaActual.correcta) {
+            this.triviaAciertos++;
+            alert("¡Correcto! Excelente conocimiento de campo.");
+          } else {
+            alert("Incorrecto. ¡A seguir repasando el bosque seco!");
+          }
+          // Pasar a otra pregunta aleatoria
+          this.triviaIndex = Math.floor(Math.random() * this.triviaPreguntas.length);
         },
         reiniciarRegistros() {
           if (confirm("¿Deseas reiniciar todos los avistamientos?")) {
