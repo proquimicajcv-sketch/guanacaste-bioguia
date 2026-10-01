@@ -6,50 +6,58 @@
   <title>BioGuía de Campo - Pacífico Norte (Guanacaste)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    .bg-bosque-seco {
+      background: linear-gradient(to bottom, rgba(42, 61, 38, 0.90), rgba(74, 53, 38, 0.92)), url('https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+  </style>
 </head>
-<body class="bg-emerald-950 text-stone-100 min-h-screen" x-data="guanacasteApp()">
+<body class="bg-bosque-seco text-stone-100 min-h-screen" x-data="guanacasteApp()">
 
-  <!-- Header Estilo Tapantí -->
-  <header class="bg-emerald-900 border-b border-emerald-800 p-4 sticky top-0 z-50 shadow-md">
+  <!-- Header Estilo Bosque Seco (Verde Musgo y Tonos Café) -->
+  <header class="bg-[#2D3823]/95 border-b border-[#5C4033] p-4 sticky top-0 z-50 shadow-lg backdrop-blur">
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
       <div>
-        <span class="text-xs uppercase tracking-widest text-emerald-300 font-semibold">P. N. / Pacífico Norte (Guanacaste)</span>
-        <h1 class="text-2xl font-bold text-white flex items-center gap-2">🌿 BioGuía de Campo</h1>
+        <span class="text-xs uppercase tracking-widest text-[#A3B18B] font-semibold">P. N. / Pacífico Norte (Guanacaste)</span>
+        <h1 class="text-2xl font-bold text-white flex items-center gap-2">🌳 BioGuía Bosque Seco</h1>
       </div>
       
       <!-- Botones Superiores de Navegación -->
       <div class="flex items-center gap-2 flex-wrap">
-        <button @click="modalGlosario = true" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-emerald-700 flex items-center gap-1.5">
+        <button @click="modalGlosario = true" class="bg-[#414833] hover:bg-[#586144] text-[#E9EDC9] px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-[#5C4033] flex items-center gap-1.5">
           📖 Glosario (<span x-text="glosarioTerminos.length"></span>)
         </button>
-        <button @click="abrirTrivia()" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-emerald-700 flex items-center gap-1.5">
+        <button @click="abrirTrivia()" class="bg-[#414833] hover:bg-[#586144] text-[#E9EDC9] px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-[#5C4033] flex items-center gap-1.5">
           🎮 Trivia (<span x-text="triviaPreguntas.length"></span>)
         </button>
-        <button @click="modalReporte = true" class="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-emerald-500 flex items-center gap-1.5">
-          📋 <span x-text="totalRegistrados"></span>
+        <button @click="modalReporte = true" class="bg-[#6F4E37] hover:bg-[#8B5A2B] text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition border border-[#A47551] flex items-center gap-1.5 shadow">
+          📋 <span x-text="totalRegistrados"></span> Avistados
         </button>
       </div>
     </div>
   </header>
 
   <!-- Main Container -->
-  <main class="max-w-7xl mx-auto p-4 md:p-6 bg-emerald-950 min-h-screen">
+  <main class="max-w-7xl mx-auto p-4 md:p-6 min-h-screen">
     
     <!-- Buscador -->
     <div class="mb-6 space-y-4">
       <input type="text" x-model="busqueda" placeholder="Buscar especie o #ficha..." 
-        class="w-full bg-emerald-900/80 border border-emerald-700 rounded-xl px-4 py-3 text-white placeholder-emerald-300/60 focus:outline-none focus:border-emerald-400">
+        class="w-full bg-[#1E2419]/90 border border-[#5C4033] rounded-xl px-4 py-3 text-white placeholder-stone-400 focus:outline-none focus:border-[#A3B18B] shadow-inner">
       
-      <!-- Filtros por Categoría -->
+      <!-- Filtros por Categoría (Tonos Musgo y Café) -->
       <div class="flex flex-wrap gap-2">
         <template x-for="cat in categorias">
           <button @click="categoriaActiva = cat" 
-            :class="categoriaActiva === cat ? 'bg-emerald-500 text-emerald-950 font-bold' : 'bg-emerald-900/60 text-emerald-200 hover:bg-emerald-800'"
-            class="px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-emerald-700" x-text="cat"></button>
+            :class="categoriaActiva === cat ? 'bg-[#A3B18B] text-[#1E2419] font-bold shadow' : 'bg-[#2D3823]/80 text-[#D8F3DC] hover:bg-[#3A4A2F]'"
+            class="px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-[#5C4033]" x-text="cat"></button>
         </template>
         <button @click="categoriaActiva = 'Avistados'" 
-          :class="categoriaActiva === 'Avistados' ? 'bg-emerald-500 text-emerald-950 font-bold' : 'bg-emerald-900/60 text-emerald-200 hover:bg-emerald-800'"
-          class="px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-emerald-700" 
+          :class="categoriaActiva === 'Avistados' ? 'bg-[#A3B18B] text-[#1E2419] font-bold shadow' : 'bg-[#2D3823]/80 text-[#D8F3DC] hover:bg-[#3A4A2F]'"
+          class="px-3.5 py-1.5 rounded-lg text-sm font-medium transition border border-[#5C4033]" 
           x-text="`✓ Avistados (${totalRegistrados})`"></button>
       </div>
     </div>
@@ -57,47 +65,47 @@
     <!-- Grid de Tarjetas -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <template x-for="esp in especiesFiltradas" :key="esp.id">
-        <div class="bg-emerald-900/40 border rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between transition hover:border-emerald-500"
-             :class="esp.registrado ? 'border-emerald-500 ring-1 ring-emerald-500' : 'border-emerald-800'">
+        <div class="bg-[#262D1F]/90 backdrop-blur border rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between transition hover:border-[#A3B18B]"
+             :class="esp.registrado ? 'border-[#A3B18B] ring-2 ring-[#A3B18B]/50' : 'border-[#5C4033]/60'">
           <div>
             <!-- Cabecera de Tarjeta -->
-            <div class="bg-emerald-950/80 px-4 py-2 border-b border-emerald-800 flex justify-between items-center">
-              <span class="text-xs font-mono text-emerald-300 font-bold" x-text="`${esp.id} • ${esp.categoria}`"></span>
+            <div class="bg-[#1C2317] px-4 py-2 border-b border-[#5C4033] flex justify-between items-center">
+              <span class="text-xs font-mono text-[#CCD5AE] font-bold" x-text="`${esp.id} • ${esp.categoria}`"></span>
               <div class="flex gap-2 items-center">
-                <span x-show="esp.registrado" class="bg-emerald-700 text-white text-[10px] px-2 py-0.5 rounded font-bold">✓ AVISTADO</span>
-                <span class="text-xs px-2 py-0.5 rounded font-semibold bg-emerald-800 text-emerald-200 border border-emerald-700" x-text="esp.estado"></span>
+                <span x-show="esp.registrado" class="bg-[#606C38] text-white text-[10px] px-2 py-0.5 rounded font-bold">✓ AVISTADO</span>
+                <span class="text-xs px-2 py-0.5 rounded font-semibold bg-[#4A3B32] text-[#D4A373] border border-[#5C4033]" x-text="esp.estado"></span>
               </div>
             </div>
 
             <!-- Imagen Interactiva -->
             <div @click="abrirRegistroGPS(esp)" class="relative h-48 bg-stone-900 overflow-hidden cursor-pointer group">
               <img :src="esp.imagen" :alt="esp.nombreComun" class="w-full h-full object-cover transition duration-300 group-hover:scale-105">
-              <div class="absolute inset-0 bg-emerald-950/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-emerald-200 font-semibold text-xs gap-1">
+              <div class="absolute inset-0 bg-[#2D3823]/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-[#E9EDC9] font-semibold text-xs gap-1">
                 📍 Registrar Coordenadas GPS
               </div>
             </div>
 
             <!-- Datos de la Especie -->
             <div class="p-4 space-y-1.5">
-              <h3 class="text-base font-bold text-emerald-300 italic" x-text="esp.nombreCientifico"></h3>
+              <h3 class="text-base font-bold text-[#CCD5AE] italic" x-text="esp.nombreCientifico"></h3>
               <p class="text-sm font-medium text-stone-100" x-text="esp.nombreComun"></p>
-              <p class="text-xs text-emerald-200/70 line-clamp-2" x-text="esp.descripcion"></p>
+              <p class="text-xs text-stone-300 line-clamp-2" x-text="esp.descripcion"></p>
               
-              <div class="grid grid-cols-3 gap-1 pt-2 text-[10px] text-emerald-100/80 bg-emerald-950/60 p-2 rounded-lg border border-emerald-800">
-                <div><strong class="text-emerald-400 block">Hábitat:</strong> <span x-text="esp.habitat"></span></div>
-                <div><strong class="text-emerald-400 block">Hábitos:</strong> <span x-text="esp.habitos"></span></div>
-                <div><strong class="text-emerald-400 block">Dieta:</strong> <span x-text="esp.dieta"></span></div>
+              <div class="grid grid-cols-3 gap-1 pt-2 text-[10px] text-stone-200 bg-[#1C2317]/80 p-2 rounded-lg border border-[#5C4033]/50">
+                <div><strong class="text-[#CCD5AE] block">Hábitat:</strong> <span x-text="esp.habitat"></span></div>
+                <div><strong class="text-[#CCD5AE] block">Hábitos:</strong> <span x-text="esp.habitos"></span></div>
+                <div><strong class="text-[#CCD5AE] block">Dieta:</strong> <span x-text="esp.dieta"></span></div>
               </div>
             </div>
           </div>
           
           <!-- Botones de Acción -->
-          <div class="p-4 pt-0 flex gap-2 border-t border-emerald-800/60 mt-2">
-            <button @click="abrirRegistroGPS(esp)" class="flex-1 bg-emerald-800 hover:bg-emerald-700 text-emerald-100 border border-emerald-600 py-2 rounded-xl text-xs font-semibold transition text-center">
+          <div class="p-4 pt-0 flex gap-2 border-t border-[#5C4033]/50 mt-2">
+            <button @click="abrirRegistroGPS(esp)" class="flex-1 bg-[#4A3B32] hover:bg-[#5C4033] text-[#E9EDC9] border border-[#6F4E37] py-2 rounded-xl text-xs font-semibold transition text-center shadow">
               📍 Ficha GPS
             </button>
             <button @click="toggleRegistrado(esp.id)" 
-              :class="esp.registrado ? 'bg-emerald-600 text-white' : 'bg-emerald-950 text-emerald-300 border border-emerald-700 hover:bg-emerald-900'"
+              :class="esp.registrado ? 'bg-[#606C38] text-white shadow' : 'bg-[#1C2317] text-[#CCD5AE] border border-[#5C4033] hover:bg-[#2D3823]'"
               class="flex-1 py-2 rounded-xl text-xs font-semibold transition text-center"
               x-text="esp.registrado ? '✓ Avistado' : '+ Registrar'">
             </button>
@@ -110,33 +118,33 @@
 
   <!-- MODAL: REGISTRO GPS Y NOTAS -->
   <div x-show="modalAbierto" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
-    <div class="bg-emerald-900 border border-emerald-700 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl relative text-stone-100">
+    <div class="bg-[#262D1F] border border-[#5C4033] rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl relative text-stone-100">
       <div class="flex justify-between items-start">
         <div>
-          <span class="text-xs font-mono text-emerald-300" x-text="especieSeleccionada.id + ' • ' + especieSeleccionada.categoria"></span>
+          <span class="text-xs font-mono text-[#CCD5AE]" x-text="especieSeleccionada.id + ' • ' + especieSeleccionada.categoria"></span>
           <h2 class="text-xl font-bold text-white italic" x-text="especieSeleccionada.nombreCientifico"></h2>
-          <p class="text-sm text-emerald-200" x-text="especieSeleccionada.nombreComun"></p>
+          <p class="text-sm text-[#D4A373]" x-text="especieSeleccionada.nombreComun"></p>
         </div>
-        <button @click="modalAbierto = false" class="text-emerald-300 hover:text-white text-xl font-bold">&times;</button>
+        <button @click="modalAbierto = false" class="text-stone-300 hover:text-white text-xl font-bold">&times;</button>
       </div>
 
-      <div class="bg-emerald-950 p-4 rounded-xl space-y-2 border border-emerald-800 text-xs font-mono text-emerald-200">
+      <div class="bg-[#1C2317] p-4 rounded-xl space-y-2 border border-[#5C4033] text-xs font-mono text-stone-200">
         <p><strong>📅 Fecha y Hora:</strong> <span x-text="registroActual.fecha"></span></p>
         <p><strong>🌐 Coordenadas GPS:</strong> <span x-text="registroActual.coords">Detectando ubicación...</span></p>
         <p><strong>📍 Precisión:</strong> <span x-text="registroActual.precision"></span></p>
       </div>
 
       <div class="space-y-2">
-        <label class="text-xs font-semibold text-emerald-300 uppercase tracking-wider">Notas de Campo / Microclima:</label>
+        <label class="text-xs font-semibold text-[#CCD5AE] uppercase tracking-wider">Notas de Campo / Microclima:</label>
         <textarea x-model="registroActual.observaciones" rows="3" placeholder="Ej. Temperatura 33°C, sombra de árbol seco, individuo activo..." 
-          class="w-full bg-emerald-950 border border-emerald-700 rounded-xl p-3 text-white text-sm focus:outline-none focus:border-emerald-400"></textarea>
+          class="w-full bg-[#1C2317] border border-[#5C4033] rounded-xl p-3 text-white text-sm focus:outline-none focus:border-[#A3B18B]"></textarea>
       </div>
 
       <div class="flex gap-3 pt-2">
-        <button @click="guardarAvistamiento()" class="flex-1 bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold py-2.5 rounded-xl text-sm transition">
+        <button @click="guardarAvistamiento()" class="flex-1 bg-[#606C38] hover:bg-[#4f592d] text-white font-bold py-2.5 rounded-xl text-sm transition shadow">
           💾 Guardar Avistamiento
         </button>
-        <button @click="modalAbierto = false" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-200 px-4 py-2.5 rounded-xl text-sm transition">
+        <button @click="modalAbierto = false" class="bg-[#4A3B32] hover:bg-[#5C4033] text-stone-200 px-4 py-2.5 rounded-xl text-sm transition">
           Cancelar
         </button>
       </div>
@@ -145,96 +153,96 @@
 
   <!-- MODAL: REPORTE E ÍNDICE DE AVISTAMIENTOS -->
   <div x-show="modalReporte" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
-    <div class="bg-emerald-900 border border-emerald-700 rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative text-stone-100 max-h-[90vh] overflow-y-auto">
-      <div class="flex justify-between items-start border-b border-emerald-800 pb-3">
+    <div class="bg-[#262D1F] border border-[#5C4033] rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative text-stone-100 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-start border-b border-[#5C4033] pb-3">
         <div>
-          <span class="text-xs font-mono text-emerald-300 uppercase">Registro de Campo</span>
+          <span class="text-xs font-mono text-[#CCD5AE] uppercase">Registro de Campo</span>
           <h2 class="text-xl font-bold text-white">Índice de Avistamientos</h2>
-          <p class="text-xs text-emerald-200" x-text="`${totalRegistrados} de ${especies.length} especies confirmadas`"></p>
+          <p class="text-xs text-stone-300" x-text="`${totalRegistrados} de ${especies.length} especies confirmadas`"></p>
         </div>
-        <button @click="modalReporte = false" class="text-emerald-300 hover:text-white text-xl font-bold">&times;</button>
+        <button @click="modalReporte = false" class="text-stone-300 hover:text-white text-xl font-bold">&times;</button>
       </div>
 
       <!-- Tarjeta de Rango Actual -->
-      <div class="bg-emerald-950 p-4 rounded-xl border border-emerald-700 flex items-center gap-4">
-        <span class="text-3xl">🌱</span>
+      <div class="bg-[#1C2317] p-4 rounded-xl border border-[#5C4033] flex items-center gap-4">
+        <span class="text-3xl">🌳</span>
         <div>
-          <h4 class="font-bold text-emerald-300 text-sm" x-text="`Rango Actual: ${rangoActual.titulo}`"></h4>
-          <p class="text-xs text-emerald-200/80" x-text="rangoActual.descripcion"></p>
+          <h4 class="font-bold text-[#CCD5AE] text-sm" x-text="`Rango Actual: ${rangoActual.titulo}`"></h4>
+          <p class="text-xs text-stone-300" x-text="rangoActual.descripcion"></p>
         </div>
       </div>
 
       <div class="flex gap-2 flex-wrap">
-        <button @click="exportarCSV()" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 px-3 py-1.5 rounded-lg text-xs font-semibold border border-emerald-600">📥 Exportar CSV</button>
+        <button @click="exportarCSV()" class="bg-[#4A3B32] hover:bg-[#5C4033] text-[#E9EDC9] px-3 py-1.5 rounded-lg text-xs font-semibold border border-[#6F4E37]">📥 Exportar CSV</button>
         <button @click="reiniciarRegistros()" class="bg-red-950 hover:bg-red-900 text-red-200 px-3 py-1.5 rounded-lg text-xs font-semibold border border-red-800">🗑️ Reiniciar</button>
       </div>
 
       <!-- Lista de especies registradas -->
       <div class="space-y-3 pt-2">
         <template x-for="esp in especies.filter(e => e.registrado)" :key="esp.id">
-          <div class="bg-emerald-950 p-3 rounded-xl border border-emerald-800 flex justify-between items-center text-xs">
+          <div class="bg-[#1C2317] p-3 rounded-xl border border-[#5C4033] flex justify-between items-center text-xs">
             <div>
-              <strong class="text-emerald-300 font-mono" x-text="esp.id + ' • ' + esp.categoria"></strong>
+              <strong class="text-[#CCD5AE] font-mono" x-text="esp.id + ' • ' + esp.categoria"></strong>
               <div class="font-bold text-white italic" x-text="esp.nombreCientifico"></div>
-              <div class="text-emerald-200/70" x-text="esp.nombreComun"></div>
-              <div class="text-[10px] text-emerald-400 mt-1" x-text="`📅 ${esp.ultimaCaptura?.fecha || 'N/D'} | 🌐 ${esp.ultimaCaptura?.coords || 'Sin GPS'}`"></div>
+              <div class="text-stone-300" x-text="esp.nombreComun"></div>
+              <div class="text-[10px] text-[#A3B18B] mt-1" x-text="`📅 ${esp.ultimaCaptura?.fecha || 'N/D'} | 🌐 ${esp.ultimaCaptura?.coords || 'Sin GPS'}`"></div>
             </div>
             <button @click="toggleRegistrado(esp.id)" class="text-red-400 hover:text-red-300 font-bold px-2 py-1">&times;</button>
           </div>
         </template>
-        <p x-show="totalRegistrados === 0" class="text-center text-xs text-emerald-300/60 py-6">Aún no hay especies registradas en esta gira.</p>
+        <p x-show="totalRegistrados === 0" class="text-center text-xs text-stone-400 py-6">Aún no hay especies registradas en esta gira.</p>
       </div>
     </div>
   </div>
 
   <!-- MODAL: NOTIFICACIÓN AUTOMÁTICA DE NUEVO RANGO -->
   <div x-show="modalRangoAlerta" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
-    <div class="bg-emerald-900 border-2 border-emerald-400 rounded-2xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl">
+    <div class="bg-[#262D1F] border-2 border-[#A3B18B] rounded-2xl max-w-md w-full p-6 text-center space-y-4 shadow-2xl">
       <div class="text-4xl">🏆</div>
-      <h3 class="text-xs font-mono uppercase tracking-wider text-emerald-300">¡Nuevo Rango Desbloqueado!</h3>
+      <h3 class="text-xs font-mono uppercase tracking-wider text-[#CCD5AE]">¡Nuevo Rango Desbloqueado!</h3>
       <h2 class="text-2xl font-bold text-white" x-text="rangoActual.titulo"></h2>
-      <p class="text-sm text-emerald-200" x-text="rangoActual.descripcion"></p>
-      <button @click="modalRangoAlerta = false" class="w-full bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold py-2.5 rounded-xl text-sm transition">
+      <p class="text-sm text-stone-300" x-text="rangoActual.descripcion"></p>
+      <button @click="modalRangoAlerta = false" class="w-full bg-[#606C38] hover:bg-[#4f592d] text-white font-bold py-2.5 rounded-xl text-sm transition shadow">
         ¡Continuar Explorando!
       </button>
     </div>
   </div>
 
-  <!-- MODAL: GLOSARIO (30 TÉRMINOS) -->
+  <!-- MODAL: GLOSARIO -->
   <div x-show="modalGlosario" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
-    <div class="bg-emerald-900 border border-emerald-700 rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto text-stone-100">
-      <div class="flex justify-between items-center border-b border-emerald-800 pb-3">
-        <h2 class="text-lg font-bold text-emerald-300">📖 Glosario Científico de Campo (30 Términos)</h2>
-        <button @click="modalGlosario = false" class="text-emerald-300 text-xl font-bold">&times;</button>
+    <div class="bg-[#262D1F] border border-[#5C4033] rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-2xl max-h-[85vh] overflow-y-auto text-stone-100">
+      <div class="flex justify-between items-center border-b border-[#5C4033] pb-3">
+        <h2 class="text-lg font-bold text-[#CCD5AE]">📖 Glosario Científico de Campo (30 Términos)</h2>
+        <button @click="modalGlosario = false" class="text-stone-300 text-xl font-bold">&times;</button>
       </div>
       <div class="space-y-3 text-xs">
         <template x-for="item in glosarioTerminos" :key="item.term">
-          <div class="bg-emerald-950 p-3 rounded-xl border border-emerald-800">
-            <strong class="text-emerald-300 block text-sm mb-1" x-text="item.term"></strong>
-            <span class="text-emerald-100/90" x-text="item.def"></span>
+          <div class="bg-[#1C2317] p-3 rounded-xl border border-[#5C4033]">
+            <strong class="text-[#CCD5AE] block text-sm mb-1" x-text="item.term"></strong>
+            <span class="text-stone-300" x-text="item.def"></span>
           </div>
         </template>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: TRIVIA INTERACTIVA (30 PREGUNTAS) -->
+  <!-- MODAL: TRIVIA -->
   <div x-show="modalTrivia" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
-    <div class="bg-emerald-900 border border-emerald-700 rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl text-stone-100">
-      <div class="flex justify-between items-center border-b border-emerald-800 pb-3">
+    <div class="bg-[#262D1F] border border-[#5C4033] rounded-2xl max-w-lg w-full p-6 space-y-4 shadow-2xl text-stone-100">
+      <div class="flex justify-between items-center border-b border-[#5C4033] pb-3">
         <div>
-          <span class="text-xs text-emerald-300 font-mono" x-text="`Pregunta ${triviaIndex + 1} de ${triviaPreguntas.length} | Aciertos: ${triviaAciertos}`"></span>
+          <span class="text-xs text-[#CCD5AE] font-mono" x-text="`Pregunta ${triviaIndex + 1} de ${triviaPreguntas.length} | Aciertos: ${triviaAciertos}`"></span>
           <h2 class="text-base font-bold text-white">🎮 Reto Científico de Campo</h2>
         </div>
-        <button @click="modalTrivia = false" class="text-emerald-300 text-xl font-bold">&times;</button>
+        <button @click="modalTrivia = false" class="text-stone-300 text-xl font-bold">&times;</button>
       </div>
       
-      <div class="space-y-4 py-2" x-data="{ seleccion: null }">
-        <p class="font-semibold text-sm text-emerald-100" x-text="triviaPreguntas[triviaIndex].pregunta"></p>
+      <div class="space-y-4 py-2">
+        <p class="font-semibold text-sm text-stone-100" x-text="triviaPreguntas[triviaIndex].pregunta"></p>
         <div class="space-y-2">
           <template x-for="(opcion, idx) in triviaPreguntas[triviaIndex].opciones" :key="idx">
             <button @click="responderTrivia(idx)" 
-              class="w-full text-left bg-emerald-950 hover:bg-emerald-800 p-3 rounded-xl border border-emerald-800 text-xs transition text-emerald-200 hover:text-white"
+              class="w-full text-left bg-[#1C2317] hover:bg-[#3A4A2F] p-3 rounded-xl border border-[#5C4033] text-xs transition text-stone-200 hover:text-white"
               x-text="opcion"></button>
           </template>
         </div>
@@ -418,7 +426,6 @@
           } else {
             alert("Incorrecto. ¡A seguir repasando el bosque seco!");
           }
-          // Pasar a otra pregunta aleatoria
           this.triviaIndex = Math.floor(Math.random() * this.triviaPreguntas.length);
         },
         reiniciarRegistros() {
